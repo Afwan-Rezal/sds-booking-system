@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('is_available')->default(true);
-            $table->foreignId('room_metadata_id')->nullable()->constrained('room_metadata');
+            $table->foreignId('room_metadata_id')->nullable()->constrained('room_metadatas');
             // $table->timestamps();
         });
         
