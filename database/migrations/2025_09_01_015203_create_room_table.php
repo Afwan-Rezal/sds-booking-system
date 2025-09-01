@@ -12,20 +12,30 @@ return new class extends Migration
     public function up(): void
     {
         
-        Schema::create('room', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('is_available')->default(true);
             $table->foreignId('room_metadata_id')->nullable()->constrained('room_metadata');
             // $table->timestamps();
         });
         
-        Schema::create('room_metadata', function (Blueprint $table) {
+        Schema::create('room_metadatas', function (Blueprint $table) {
             $table->id();
             $table->integer('capacity');
             $table->string('type'); // Lab, Lecture, Turorial Room
             $table->string('location'); // Floor
             $table->text('description')->nullable();
         });
+
+        // Schema::create('room_availabilities', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
+        //     $table->string('day_of_week'); // e.g., Monday, Tuesday
+        //     $table->time('start_time');
+        //     $table->time('end_time');
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -33,7 +43,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room');
-        Schema::dropIfExists('room_metadata');
+        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('room_metadatas');
     }
 };

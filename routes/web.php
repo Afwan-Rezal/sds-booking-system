@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoomsController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('rooms', [RoomsController::class, 'create']);
