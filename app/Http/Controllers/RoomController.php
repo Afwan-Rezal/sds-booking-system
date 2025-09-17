@@ -8,7 +8,7 @@ use App\Models\Room; // Make sure to import your Room model
 use App\Models\Booking; // Import the Booking model
 use Illuminate\Support\Facades\Auth;
 
-class RoomsController extends Controller
+class RoomController extends Controller
 {
     public function index()
     {
