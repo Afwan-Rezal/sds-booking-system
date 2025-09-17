@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+        Schema::create('room_metadatas', function (Blueprint $table) {
+            $table->id();
+            $table->integer('capacity');
+            $table->string('type'); // Lab, Lecture, Turorial Room
+            $table->string('location'); // Floor
+            $table->text('description')->nullable();
+        });
         
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
@@ -20,13 +28,7 @@ return new class extends Migration
             // $table->timestamps();
         });
         
-        Schema::create('room_metadatas', function (Blueprint $table) {
-            $table->id();
-            $table->integer('capacity');
-            $table->string('type'); // Lab, Lecture, Turorial Room
-            $table->string('location'); // Floor
-            $table->text('description')->nullable();
-        });
+        
 
         // Schema::create('room_availabilities', function (Blueprint $table) {
         //     $table->id();
