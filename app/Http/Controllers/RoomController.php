@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Room; // Make sure to import your Room model
-use App\Models\Booking; // Import the Booking model
+use App\Models\Room;
+use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller

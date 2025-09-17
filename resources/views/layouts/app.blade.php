@@ -10,7 +10,7 @@
 <body>
 
     @include('partials.navbar')
-
+    @include('partials.alert') <!-- Warning popup/messages -->
     <div class="container">
         @yield('content')
     </div>
