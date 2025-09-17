@@ -54,7 +54,7 @@ class UserController extends Controller
             ];
 
             // return view('test', compact('data'))->with('message', 'Login successful!');
-            return view('profile', compact('data'))->with('message', 'Login successful!');
+            return view('home', compact('data'))->with('message', 'Login successful!');
         }
 
         return back()->withErrors([

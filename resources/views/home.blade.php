@@ -7,6 +7,6 @@
         <p class="lead">This is a simple booking system built with Laravel and Bootstrap.</p>
         <hr class="my-4">
         <p>Use the navigation bar to explore the application.</p>
-        <a class="btn btn-primary btn-lg" href="{{ url('/bookings') }}" role="button">View Bookings</a>
+        <a class="btn btn-primary btn-lg" href="{{ url('/rooms') }}" role="button">View Available Rooms</a>
     </div>
 @endsection
