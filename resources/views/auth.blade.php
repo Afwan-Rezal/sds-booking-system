@@ -17,8 +17,17 @@
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
     </div>
-    
+
     <div class="col-md-6">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <h2 class="mb-4 text-center">Register</h2>
         <form method="POST" action="{{ route('register') }}">
             @csrf
