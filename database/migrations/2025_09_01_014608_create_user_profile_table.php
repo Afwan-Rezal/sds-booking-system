@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->id();
+            @$table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('full_name');
             $table->string('role'); // Student, Staff, Admin
             $table->char('gender', 1); // 'M' or 'F'

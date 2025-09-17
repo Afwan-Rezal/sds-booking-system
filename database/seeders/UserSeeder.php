@@ -33,5 +33,16 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('12345678'),
             ],
         ]);
+
+        DB::table('user_profiles')->insert([
+            [
+                'user_id' => 3,
+                'full_name' => 'Afif Afwan Bin Mohamad Rezal',
+                'role' => 'Student',
+                'gender' => 'M',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],  
+        ]);
     }
 }
