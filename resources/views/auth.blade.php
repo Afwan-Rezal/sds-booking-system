@@ -1,3 +1,5 @@
+{{-- TODO: Enhance page after submission--}}
+
 @extends('layouts.app')
 
 @section('title', 'Login')

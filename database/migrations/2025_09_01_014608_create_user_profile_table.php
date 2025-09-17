@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->string('role');
+            $table->string('role'); // Student, Staff, Admin
             $table->char('gender', 1); // 'M' or 'F'
             // INFO: The 1 is used to specify the length of the char field
             $table->timestamps();
