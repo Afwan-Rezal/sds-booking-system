@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('rooms', [RoomsController::class, 'create']);
+Route::get('/rooms', [RoomsController::class, 'index'])->name('rooms.index');
 
 
 Route::controller(UserController::class)->group(function () {

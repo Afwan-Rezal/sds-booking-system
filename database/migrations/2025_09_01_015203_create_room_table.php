@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('is_available')->default(true);
             $table->foreignId('room_metadata_id')->nullable()->constrained('room_metadatas');
-            // $table->timestamps();
         });
 
         // Schema::create('room_availabilities', function (Blueprint $table) {
