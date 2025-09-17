@@ -13,6 +13,8 @@ Route::get('rooms', [RoomsController::class, 'create']);
 
 Route::controller(UserController::class)->group(function () {
     Route::get('login', [UserController::class, 'index'])->name('auth');
+
     Route::post('register', 'register')->name('register');
     Route::post('login', 'login')->name('login');
+    Route::post('logout', 'logout')->name('logout');
 });

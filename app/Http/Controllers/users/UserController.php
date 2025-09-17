@@ -24,22 +24,50 @@ class UserController extends Controller
         $user->password = Hash::make($request['password']);
         $user->save();
 
-        return view('home');
+        // Log the user in
+        Auth::login($user);
+
+        // Pass data to the test view (optional)
+        $data = [
+            'username' => $user->username,
+            'email' => $user->email,
+            // Add more fields if needed
+        ];
+
+        return view('test', compact('data'))->with('message', 'Registration successful!');
     }
 
     public function login(Request $request) {
-        // Login function here
-        // TODO: `Run php artisan make:request LoginRequest` to create a request class for login validation
-        $loginRequest = $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
-        // if (auth()->attempt($loginRequest)) {
-        //     $request->session()->regenerate();
-        //     return view('home');
-        // }
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        return view('home');
+            $user = Auth::user();
+            $data = [
+                'username' => $user->username,
+                'email' => $user->email,
+                // Add more fields if needed
+            ];
+
+            return view('test', compact('data'))->with('message', 'Login successful!');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // return redirect('/login');
+        return view('test')->with('message', 'Logged out successfully.');
     }
 }
