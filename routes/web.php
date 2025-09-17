@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoomsController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\users\UserController;
 
 Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/rooms', [RoomsController::class, 'index'])->name('rooms.index');
+Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
-Route::get('/rooms/book/{id}', [RoomsController::class, 'bookRoom'])->name('rooms.book');
-Route::post('/rooms/book/{id}', [RoomsController::class, 'storeBooking'])->name('rooms.storeBooking');
+Route::get('/rooms/book/{id}', [RoomController::class, 'bookRoom'])->name('rooms.book');
+Route::post('/rooms/book/{id}', [RoomController::class, 'storeBooking'])->name('rooms.storeBooking');
 
 Route::controller(UserController::class)->group(function () {
     Route::get('login', [UserController::class, 'index'])->name('auth');

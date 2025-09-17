@@ -60,7 +60,7 @@ class RoomsController extends Controller
             'time_slot'  => $request->time_slot,
             'start_time' => $start_time,
             'end_time'   => $end_time,
-            'status'     => 'booked',
+            'status'     => 'approved',
             'number_of_people' => $request->number_of_people,
         ]);
 
