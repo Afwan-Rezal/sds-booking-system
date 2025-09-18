@@ -34,7 +34,7 @@ class UserController extends Controller
             // Add more fields if needed
         ];
 
-        return view('test', compact('data'))->with('message', 'Registration successful!');
+        return view('profile', compact('data'))->with('message', 'Registration successful!');
     }
 
     public function login(Request $request) {
@@ -53,7 +53,8 @@ class UserController extends Controller
                 // Add more fields if needed
             ];
 
-            return view('test', compact('data'))->with('message', 'Login successful!');
+            // return view('test', compact('data'))->with('message', 'Login successful!');
+            return view('home', compact('data'))->with('message', 'Login successful!');
         }
 
         return back()->withErrors([
@@ -67,7 +68,7 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // return redirect('/login');
-        return view('test')->with('message', 'Logged out successfully.');
+        return redirect('/login');
+        // return view('test')->with('message', 'Logged out successfully.');
     }
 }
