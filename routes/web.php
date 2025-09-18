@@ -10,7 +10,7 @@ Route::get('/', function () {
 
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
-Route::get('/rooms/book/{id}', [RoomController::class, 'bookRoom'])->name('rooms.book');
+Route::get('/rooms/book/{id}', [RoomController::class, 'selectRoom'])->name('rooms.select'); // TODO: Change function name to selectRoom and name to rooms.select
 Route::post('/rooms/book/{id}', [RoomController::class, 'storeBooking'])->name('rooms.storeBooking');
 
 Route::controller(UserController::class)->group(function () {

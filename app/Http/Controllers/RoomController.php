@@ -16,7 +16,7 @@ class RoomController extends Controller
         return view('room_listing', compact('rooms')); // Pass to the view
     }
 
-    public function bookRoom($roomId)
+    public function selectRoom($roomId) // TODO: Change function name to selectRoom
     {
         if (!Auth::check()) 
         {
@@ -37,7 +37,6 @@ class RoomController extends Controller
             'number_of_people' => 'required|integer|min:1',
         ]);
 
-        // Extract start and end time from the slot
         [$start_time, $end_time] = explode('-', $request->time_slot);
 
         // Check if the room is available for the selected date and time slot
@@ -52,7 +51,24 @@ class RoomController extends Controller
             return back()->withErrors(['Room is already booked for the selected date and time slot.'])->withInput();
         }
 
-        // Create the booking
+        // Load room and its capacity from room_metadata, then compare with requested number_of_people
+        $room = Room::with('metadata')->findOrFail($request->room_id);
+        $capacity = optional($room->metadata)->capacity;
+
+        if (is_null($capacity)) {
+            return back()->withErrors(['Capacity for the selected room is not defined.'])->withInput();
+        }
+
+        // Reject if requested number is less than half of capacity (rounded up)
+        $minimumAllowed = (int) ceil(((int) $capacity) / 2);
+        if ((int) $request->number_of_people < $minimumAllowed) {
+            return back()->withErrors(["Requested number of people must be at least {$minimumAllowed} for this room."])->withInput();
+        }
+
+        if ((int) $request->number_of_people > (int) $capacity) {
+            return back()->withErrors(["Requested number of people exceeds room capacity ({$capacity})."])->withInput();
+        }
+        
         Booking::create([
             'room_id'    => $request->room_id,
             'user_id'    => Auth::id(),

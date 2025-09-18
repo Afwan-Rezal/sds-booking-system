@@ -8,7 +8,7 @@ use App\Models\RoomMetadata;
 class Room extends Model
 {
     // Specify the table if not following Laravel's naming convention
-    // protected $table = 'rooms';
+    protected $table = 'rooms';
 
     // Mass assignable attributes
     protected $fillable = [

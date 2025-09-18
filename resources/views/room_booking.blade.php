@@ -12,23 +12,23 @@
 
         <div class="mb-3">
             <label for="date" class="form-label">Date</label>
-            <input type="date" name="date" id="date" class="form-control" required>
+            <input type="date" name="date" id="date" class="form-control" value="{{ old('date') }}" required>
         </div>
 
         <div class="mb-3">
             <label for="time_slot" class="form-label">Time Slot</label>
             <select name="time_slot" id="time_slot" class="form-select" required>
                 <option value="">Select a time slot</option>
-                <option value="0750-0940">07:50 - 09:40</option>
-                <option value="0950-1140">09:50 - 11:40</option>
-                <option value="1150-1340">11:50 - 13:40</option>
-                <option value="1410-1600">14:10 - 16:00</option>
+                <option value="0750-0940" {{ old('time_slot') == '0750-0940' ? 'selected' : '' }}>07:50 - 09:40</option>
+                <option value="0950-1140" {{ old('time_slot') == '0950-1140' ? 'selected' : '' }}>09:50 - 11:40</option>
+                <option value="1150-1340" {{ old('time_slot') == '1150-1340' ? 'selected' : '' }}>11:50 - 13:40</option>
+                <option value="1410-1600" {{ old('time_slot') == '1410-1600' ? 'selected' : '' }}>14:10 - 16:00</option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="number_of_people" class="form-label">Number of People</label>
-            <input type="number" name="number_of_people" id="number_of_people" class="form-control" min="1" required>
+            <input type="number" name="number_of_people" id="number_of_people" class="form-control" min="1" value="{{ old('number_of_people') }}" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit Request</button>

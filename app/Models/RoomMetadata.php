@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoomMetadata extends Model
 {
+    protected $table = 'room_metadatas';
     // Mass assignable attributes based on your room_metadatas table columns
     protected $fillable = [
         'capacity',
