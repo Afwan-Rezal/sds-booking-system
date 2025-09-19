@@ -24,26 +24,24 @@ The system will be extended with features such as role-based permissions, bookin
 
 ## Application Requirements
 
-(These are the initial requirements. You are expected to expand upon them as necessary.)
-
--   [ ] **Authentication**
+-   [x] **Authentication**
 
     -   Only authenticated users can make a booking.
 
--   [ ] **High-Capacity Room Rule**
+-   [x] **High-Capacity Room Rule**
 
     -   A user is not allowed to book a high-capacity room if their group size is less than half of the room's capacity.
 
--   [ ] **Single Booking per Slot**
+-   [x] **Single Booking per Slot**
 
     -   A user cannot book more than one room for the same date and time slot.
     -   Time slots should align with the UBD timetable schedule.
 
--   [ ] **No Double Booking of Rooms**
+-   [x] **No Double Booking of Rooms**
 
     -   A room cannot be booked by more than one user for the same date and time slot.
 
--   [ ] **Conflict Detection**
+-   [x] **Conflict Detection**
     -   The application must detect and prevent any conflicting booking conditions based on the rules above.
 
 ---
