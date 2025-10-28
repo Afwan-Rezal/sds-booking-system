@@ -27,12 +27,12 @@
         <form method="POST" action="{{ route('register') }}">
             @csrf
             <div class="mb-3">
-                <label for="register-name" class="form-label">Username</label>
-                <input type="text" class="form-control" id="register-username" name="username" required>
+                <label for="register-username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="register-username" name="username" value="{{ old('username') }}" required>
             </div>
             <div class="mb-3">
                 <label for="register-email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="register-email" name="email" required>
+                <input type="email" class="form-control" id="register-email" name="email" value="{{ old('email') }}" required>
             </div>
             <div class="mb-3">
                 <label for="register-password" class="form-label">Password</label>
@@ -41,6 +41,30 @@
             <div class="mb-3">
                 <label for="register-password_confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" id="register-password_confirmation" name="password_confirmation" required>
+            </div>
+            
+            <hr class="my-4">
+            
+            <h5 class="mb-3">Profile Information</h5>
+            <div class="mb-3">
+                <label for="register-full_name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="register-full_name" name="full_name" value="{{ old('full_name') }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="register-gender" class="form-label">Gender</label>
+                <select class="form-select" id="register-gender" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="M" {{ old('gender') == 'M' ? 'selected' : '' }}>Male</option>
+                    <option value="F" {{ old('gender') == 'F' ? 'selected' : '' }}>Female</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="register-role" class="form-label">I am a</label>
+                <select class="form-select" id="register-role" name="user_role" required>
+                    <option value="">Select Role</option>
+                    <option value="student" {{ old('user_role') == 'student' ? 'selected' : '' }}>Student</option>
+                    <option value="staff" {{ old('user_role') == 'staff' ? 'selected' : '' }}>Staff (Pending Admin Approval)</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-success w-100">Register</button>
         </form>

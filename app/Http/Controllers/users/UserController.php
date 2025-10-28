@@ -24,6 +24,15 @@ class UserController extends Controller
         $user->password = Hash::make($request['password']);
         $user->save();
 
+        // Create user profile
+        $role = $request['user_role'] === 'staff' ? 'temporary-access' : 'student';
+        
+        $user->profile()->create([
+            'full_name' => $request['full_name'],
+            'role' => $role,
+            'gender' => $request['gender'],
+        ]);
+
         // Log the user in
         Auth::login($user);
 

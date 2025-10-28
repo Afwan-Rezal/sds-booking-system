@@ -30,6 +30,8 @@ class RedirectBasedOnRole
                         return redirect()->route('staff.dashboard');
                     case 'student':
                         return redirect()->route('student.dashboard');
+                    case 'temporary-access':
+                        return redirect()->route('temporary.dashboard');
                     default:
                         // If role is not recognized, allow the request to continue
                         break;
