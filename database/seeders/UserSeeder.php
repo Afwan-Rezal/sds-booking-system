@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             [
                 'user_id' => 1,
                 'full_name' => 'Abdullah Admin',
-                'role' => 'Admin',
+                'role' => 'admin',
                 'gender' => 'M',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
             [
                 'user_id' => 2,
                 'full_name' => 'Ahmad Staff',
-                'role' => 'Staff',
+                'role' => 'staff',
                 'gender' => 'M',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -62,7 +62,7 @@ class UserSeeder extends Seeder
             [
                 'user_id' => 3,
                 'full_name' => 'Afif Afwan Bin Mohamad Rezal',
-                'role' => 'Student',
+                'role' => 'student',
                 'gender' => 'M',
                 'created_at' => now(),
                 'updated_at' => now(),
