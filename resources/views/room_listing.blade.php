@@ -12,11 +12,11 @@
 
                     @if($room->is_available == false)
                         <p class="text-danger">This room is currently under maintenance and cannot be booked.</p>
-                        <a href="{{ route('rooms.select', ['id' => $room->id]) }}" class="btn btn-secondary" style="pointer-events: none; opacity: 0.5;"> {{--  TODO: Change rooms.book to rooms.select --}}
+                        <a href="{{ route('rooms.select', ['id' => $room->id]) }}" class="btn btn-secondary" style="pointer-events: none; opacity: 0.5;">
                             Book
                         </a>
                     @else
-                        <a href="{{ route('rooms.select', ['id' => $room->id]) }}" class="btn btn-primary"> {{--  TODO: Change rooms.book to rooms.select --}}
+                        <a href="{{ route('rooms.select', ['id' => $room->id]) }}" class="btn btn-primary">
                             Book
                         </a>
                     @endif

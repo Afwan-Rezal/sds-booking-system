@@ -24,17 +24,19 @@ class UserController extends Controller
         $user->password = Hash::make($request['password']);
         $user->save();
 
+        // Create user profile
+        $role = $request['user_role'] === 'staff' ? 'temporary-access' : 'student';
+        
+        $user->profile()->create([
+            'full_name' => $request['full_name'],
+            'role' => $role,
+            'gender' => $request['gender'],
+        ]);
+
         // Log the user in
         Auth::login($user);
 
-        // Pass data to the test view (optional)
-        $data = [
-            'username' => $user->username,
-            'email' => $user->email,
-            // Add more fields if needed
-        ];
-
-        return view('profile', compact('data'))->with('message', 'Registration successful!');
+        return redirect()->intended('/')->with('success', 'Registration successful!');
     }
 
     public function login(Request $request) {
@@ -46,15 +48,7 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            $user = Auth::user();
-            $data = [
-                'username' => $user->username,
-                'email' => $user->email,
-                // Add more fields if needed
-            ];
-
-            // return view('test', compact('data'))->with('message', 'Login successful!');
-            return view('home', compact('data'))->with('message', 'Login successful!');
+            return redirect()->intended('/')->with('success', 'Login successful!');
         }
 
         return back()->withErrors([
