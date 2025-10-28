@@ -19,10 +19,10 @@
             <label for="time_slot" class="form-label">Time Slot</label>
             <select name="time_slot" id="time_slot" class="form-select" required>
                 <option value="">Select a time slot</option>
-                <option value="0750-0940" {{ old('time_slot') == '0750-0940' ? 'selected' : '' }}>07:50 - 09:40</option>
-                <option value="0950-1140" {{ old('time_slot') == '0950-1140' ? 'selected' : '' }}>09:50 - 11:40</option>
-                <option value="1150-1340" {{ old('time_slot') == '1150-1340' ? 'selected' : '' }}>11:50 - 13:40</option>
-                <option value="1410-1600" {{ old('time_slot') == '1410-1600' ? 'selected' : '' }}>14:10 - 16:00</option>
+                <option value="07:50:00-09:40:00" {{ old('time_slot') == '07:50:00-09:40:00' ? 'selected' : '' }}>07:50 - 09:40</option>
+                <option value="09:50:00-11:40:00" {{ old('time_slot') == '09:50:00-11:40:00' ? 'selected' : '' }}>09:50 - 11:40</option>
+                <option value="11:50:00-13:40:00" {{ old('time_slot') == '11:50:00-13:40:00' ? 'selected' : '' }}>11:50 - 13:40</option>
+                <option value="14:10:00-16:00:00" {{ old('time_slot') == '14:10:00-16:00:00' ? 'selected' : '' }}>14:10 - 16:00</option>
             </select>
         </div>
 
