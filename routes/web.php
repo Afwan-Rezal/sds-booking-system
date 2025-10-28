@@ -6,7 +6,20 @@ use App\Http\Controllers\users\UserController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->middleware('redirect.role');
+
+// Dashboard routes based on role
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard')->middleware('auth');
+
+Route::get('/staff/dashboard', function () {
+    return view('staff.dashboard');
+})->name('staff.dashboard')->middleware('auth');
+
+Route::get('/student/dashboard', function () {
+    return view('student.dashboard');
+})->name('student.dashboard')->middleware('auth');
 
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
