@@ -98,7 +98,7 @@ class RoomController extends Controller
                 ];
             }
         }
-
+        // dd($roomView);
         return view('room_listing', [
             'rooms' => $rooms,
             'roomView' => $roomView,
