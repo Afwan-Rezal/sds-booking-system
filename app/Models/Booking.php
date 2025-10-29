@@ -19,6 +19,7 @@ class Booking extends Model
         'end_time',
         'status',
         'number_of_people',
+        'purpose',
     ];
 
     public $timestamps = true;

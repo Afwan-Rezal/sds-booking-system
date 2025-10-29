@@ -35,9 +35,19 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Bookings</h5>
-                            <p class="card-text">Manage room bookings.</p>
-                            <button class="btn btn-primary" disabled>Coming Soon</button>
+                            <h5 class="card-title">Pending Bookings</h5>
+                            <p class="card-text">Review and approve booking requests.</p>
+                            <a href="{{ route('admin.pending_bookings') }}" class="btn btn-warning">View Pending Bookings</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">My Bookings</h5>
+                            <p class="card-text">View your personal room bookings.</p>
+                            <a href="{{ route('bookings.list') }}" class="btn btn-primary">View My Bookings</a>
                         </div>
                     </div>
                 </div>

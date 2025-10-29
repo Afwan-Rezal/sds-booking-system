@@ -45,7 +45,8 @@
                     </div>
                     
                     <div class="mt-3">
-                        <form method="POST" action="{{ route('logout') }}">
+                        <a href="{{ route('bookings.list') }}" class="btn btn-primary me-2">View My Bookings</a>
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-secondary">Logout</button>
                         </form>
