@@ -7,13 +7,6 @@ use Carbon\Carbon;
 
 class RoomViewBuilder
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //
-    }
 
     public function buildRoomViewData($rooms): array
     {
