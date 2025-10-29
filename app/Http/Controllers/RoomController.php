@@ -106,7 +106,7 @@ class RoomController extends Controller
         ]);
     }
 
-    public function selectRoom($roomId) // TODO: Change function name to selectRoom
+    public function selectRoom($roomId)
     {
         if (!Auth::check()) 
         {

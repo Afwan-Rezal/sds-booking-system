@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
             [
                 'id' => 3,
                 'username' => '21B6027',
-                'email' => '21B6027@ubd.edu.bn',
+                'email' => '21B6027@mail.com',
                 'password' => bcrypt('12345678'),
                 'created_at' => now(),
                 'updated_at' => now(),
