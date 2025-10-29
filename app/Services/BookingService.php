@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Room;
 use App\Models\Booking;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,26 @@ class BookingService
      */
     public function create(array $data, int $userId): Booking
     {
+        $this->validateInput($data);
+
+        [$start_time, $end_time] = $this->parseTimeSlot($data['time_slot']);
+
+        $now = now();
+        $this->ensureFutureWindow($data['date'], $start_time, $now);
+        $this->ensureLeadTime($data['date'], $start_time, $now);
+
+        $this->ensureAvailability((int) $data['room_id'], $data['date'], $start_time, $end_time);
+
+        $room = $this->loadRoomWithCapacity((int) $data['room_id']);
+        // $this->ensureRoomAllowsRole($room, $this->getUserRole($userId));
+
+        $this->enforceCapacityBounds($room, (int) $data['number_of_people']);
+
+        return $this->createBookingRecord($data, $userId, $start_time, $end_time);
+    }
+
+    private function validateInput(array $data): void
+    {
         $validator = Validator::make($data, [
             'room_id' => 'required|exists:rooms,id',
             'date' => 'required|date|after_or_equal:today',
@@ -31,27 +52,40 @@ class BookingService
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
+    }
 
-        [$start_time, $end_time] = array_map('trim', explode('-', $data['time_slot']));
+    private function parseTimeSlot(string $timeSlot): array
+    {
+        [$start_time, $end_time] = array_map('trim', explode('-', $timeSlot));
+        return [$start_time, $end_time];
+    }
 
-        $now = now();
-        $startDateTime = Carbon::parse(($data['date'] ?? '') . ' ' . $start_time);
+    private function ensureFutureWindow(string $date, string $start_time, Carbon $now): void
+    {
+        $startDateTime = Carbon::parse($date . ' ' . $start_time);
         if ($startDateTime->lte($now)) {
             throw ValidationException::withMessages([
                 'date' => ['Booking must be made for a future date and/or timeslot.'],
             ]);
         }
+    }
 
+    private function ensureLeadTime(string $date, string $start_time, Carbon $now): void
+    {
+        $startDateTime = Carbon::parse($date . ' ' . $start_time);
         $minutesUntilStart = $now->diffInMinutes($startDateTime);
         if ($minutesUntilStart <= 30) {
             throw ValidationException::withMessages([
                 'time_slot' => ['Bookings must be made more than 30 minutes before the start time.'],
             ]);
         }
+    }
 
+    private function ensureAvailability(int $roomId, string $date, string $start_time, string $end_time): void
+    {
         $existingBooking = DB::table('bookings')
-            ->where('room_id', $data['room_id'])
-            ->where('date', $data['date'])
+            ->where('room_id', $roomId)
+            ->where('date', $date)
             ->where('start_time', $start_time)
             ->where('end_time', $end_time)
             ->first();
@@ -61,8 +95,11 @@ class BookingService
                 'time_slot' => ['Room is already booked for the selected date and time slot.'],
             ]);
         }
+    }
 
-        $room = Room::with('metadata')->findOrFail($data['room_id']);
+    private function loadRoomWithCapacity(int $roomId): Room
+    {
+        $room = Room::with('metadata')->findOrFail($roomId);
         $capacity = optional($room->metadata)->capacity;
 
         if (is_null($capacity)) {
@@ -71,19 +108,58 @@ class BookingService
             ]);
         }
 
-        $minimumAllowed = (int) ceil(((int) $capacity) / 2);
-        if ((int) $data['number_of_people'] < $minimumAllowed) {
+        return $room;
+    }
+
+    private function enforceCapacityBounds(Room $room, int $requestedCount): void
+    {
+        $capacity = (int) optional($room->metadata)->capacity;
+        $minimumAllowed = (int) ceil($capacity / 2);
+
+        if ($requestedCount < $minimumAllowed) {
             throw ValidationException::withMessages([
                 'number_of_people' => ["Requested number of people must be at least {$minimumAllowed} for this room."],
             ]);
         }
 
-        if ((int) $data['number_of_people'] > (int) $capacity) {
+        if ($requestedCount > $capacity) {
             throw ValidationException::withMessages([
                 'number_of_people' => ["Requested number of people exceeds room capacity ({$capacity})."],
             ]);
         }
+    }
 
+    private function getUserRole(int $userId): ?string
+    {
+        $user = User::with('profile')->findOrFail($userId);
+        return $user->profile ? strtolower($user->profile->role) : null;
+    }
+
+    private function ensureRoomAllowsRole(Room $room, ?string $role): void
+    {
+        $meta = $room->metadata;
+
+        $allowed = false;
+
+        if ($role === 'admin') {
+            $allowed = (bool) ($meta->admin_can_book ?? false);
+        } elseif ($role === 'staff') {
+            $allowed = (bool) ($meta->staff_can_book ?? false);
+        } elseif ($role === 'student') {
+            $allowed = (bool) ($meta->student_can_book ?? false);
+        } else {
+            $allowed = false;
+        }
+
+        if (!$allowed) {
+            throw ValidationException::withMessages([
+                'room_id' => ['Your role is not permitted to book this room.'],
+            ]);
+        }
+    }
+
+    private function createBookingRecord(array $data, int $userId, string $start_time, string $end_time): Booking
+    {
         return Booking::create([
             'room_id'    => $data['room_id'],
             'user_id'    => $userId,
