@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\users\UserController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\users\AdminController;
 
 Route::get('/', function () {
     return view('home');
