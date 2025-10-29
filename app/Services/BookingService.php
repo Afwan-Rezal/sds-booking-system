@@ -37,7 +37,11 @@ class BookingService
 
         $this->enforceCapacityBounds($room, (int) $data['number_of_people']);
 
-        return $this->createBookingRecord($data, $userId, $start_time, $end_time);
+        // Determine status based on user role
+        $userRole = $this->getUserRole($userId);
+        $status = ($userRole === 'admin') ? 'approved' : 'pending';
+
+        return $this->createBookingRecord($data, $userId, $start_time, $end_time, $status);
     }
 
     private function validateInput(array $data): void
@@ -47,6 +51,7 @@ class BookingService
             'date' => 'required|date|after_or_equal:today',
             'time_slot' => 'required|string',
             'number_of_people' => 'required|integer|min:1',
+            'purpose' => 'required|string|min:10',
         ]);
 
         if ($validator->fails()) {
@@ -88,6 +93,7 @@ class BookingService
             ->where('date', $date)
             ->where('start_time', $start_time)
             ->where('end_time', $end_time)
+            ->where('status', 'approved') // Only check approved bookings for availability
             ->first();
 
         if ($existingBooking) {
@@ -158,7 +164,7 @@ class BookingService
         }
     }
 
-    private function createBookingRecord(array $data, int $userId, string $start_time, string $end_time): Booking
+    private function createBookingRecord(array $data, int $userId, string $start_time, string $end_time, string $status): Booking
     {
         return Booking::create([
             'room_id'    => $data['room_id'],
@@ -167,8 +173,9 @@ class BookingService
             'time_slot'  => $data['time_slot'],
             'start_time' => $start_time,
             'end_time'   => $end_time,
-            'status'     => 'approved',
+            'status'     => $status,
             'number_of_people' => $data['number_of_people'],
+            'purpose'    => $data['purpose'],
         ]);
     }
 }

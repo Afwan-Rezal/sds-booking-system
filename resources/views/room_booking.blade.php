@@ -31,6 +31,12 @@
             <input type="number" name="number_of_people" id="number_of_people" class="form-control" min="1" value="{{ old('number_of_people') }}" required>
         </div>
 
+        <div class="mb-3">
+            <label for="purpose" class="form-label">Reason for Request</label>
+            <textarea name="purpose" id="purpose" class="form-control" rows="4" required>{{ old('purpose') }}</textarea>
+            <small class="form-text text-muted">Please provide details about why you need to book this room.</small>
+        </div>
+
         <button type="submit" class="btn btn-primary">Submit Request</button>
     </form>
 </div>
