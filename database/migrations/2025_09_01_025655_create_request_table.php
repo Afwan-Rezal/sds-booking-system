@@ -21,6 +21,7 @@ return new class extends Migration
             $table->time('end_time');
             $table->string('status')->default('pending'); // pending, approved, rejected
             $table->integer('number_of_people');
+            $table->text('purpose')->nullable();
             $table->timestamps();
         });
     }
