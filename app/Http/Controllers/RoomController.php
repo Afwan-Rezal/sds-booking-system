@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Room;
 use App\Models\Booking;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 use App\Services\RoomViewBuilder;
 use App\Services\BookingService;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+
+use Carbon\Carbon;
 
 class RoomController extends Controller
 {
@@ -26,7 +28,7 @@ class RoomController extends Controller
 
         $result = $this->roomViewBuilder->buildRoomViewData($rooms);
 
-        return view('room_listing', [
+        return view('lists.room_listing', [
             'rooms' => $rooms,
             'roomView' => $result['roomView'],
             'now' => $result['now'],
@@ -41,44 +43,8 @@ class RoomController extends Controller
         } else
         {
             $selectedRoom = Room::findOrFail($roomId);
-            return view('room_booking', compact('selectedRoom'));
+            return view('forms.room_booking', compact('selectedRoom'));
         }
-    }
-
-    public function storeBooking(Request $request)
-    {
-        try {
-            $this->bookingService->create($request->all(), Auth::id());
-            
-            // Check user role to determine message
-            $user = Auth::user();
-            $role = strtolower($user->profile->role ?? '');
-            
-            if ($role === 'admin') {
-                $message = 'Room booked successfully!';
-            } else {
-                $message = 'Booking request submitted successfully! It is pending admin approval.';
-            }
-        } catch (ValidationException $e) {
-            return back()->withErrors($e->errors())->withInput();
-        }
-
-        return redirect()->route('rooms.index')->with('success', $message);
-    }
-
-    public function myBookings()
-    {
-        if (!Auth::check()) {
-            return redirect()->route('auth')->with('error', 'You must be logged in to view your bookings.');
-        }
-
-        $bookings = Booking::with(['room.metadata'])
-            ->where('user_id', Auth::id())
-            ->orderBy('date', 'desc')
-            ->orderBy('start_time', 'desc')
-            ->get();
-
-        return view('booking_list', compact('bookings'));
     }
                
 }
