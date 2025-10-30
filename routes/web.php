@@ -32,6 +32,10 @@ Route::post('/rooms/book/{id}', [BookingController::class, 'addBooking'])->name(
 
 Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.list')->middleware('auth');
 
+Route::get('/booking/edit/{id}', [BookingController::class, 'selectBooking'])->name('bookings.edit')->middleware('auth');
+Route::post('/booking/edit/{id}', [BookingController::class, 'updateBooking'])->name('bookings.update')->middleware('auth');
+Route::post('/booking/delete/{id}', [BookingController::class, 'deleteBooking'])->name('bookings.delete')->middleware('auth');
+
 Route::controller(UserController::class)->group(function () {
     Route::get('login', [UserController::class, 'index'])->name('auth');
     Route::post('register', 'register')->name('register');

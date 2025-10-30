@@ -32,11 +32,12 @@
                                         <th>Purpose</th>
                                         <th>Status</th>
                                         <th>Requested On</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($bookings as $booking)
-                                        <tr>
+                                        <tr class="selectable-row" data-booking-id="{{ $booking->id }}">
                                             <td>#{{ $booking->id }}</td>
                                             <td>{{ $booking->room->name }}</td>
                                             <td>{{ \Carbon\Carbon::parse($booking->date)->format('Y-m-d') }}</td>
@@ -59,6 +60,10 @@
                                                 @endif
                                             </td>
                                             <td>{{ $booking->created_at->format('Y-m-d H:i') }}</td>
+                                            <td class="row-actions" style="white-space:nowrap;">
+                                                <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-primary me-1">Edit</a>
+                                                <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+                                            </td>
                                         </tr>
 
                                         <!-- Purpose Modal -->
@@ -77,6 +82,13 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <!-- Hidden cancellation form for this booking -->
+                                        <form id="deleteForm{{ $booking->id }}" action="{{ route('bookings.delete', $booking->id) }}" method="POST" style="display:none;">
+                                            @csrf
+                                            <input type="hidden" name="cancellation_reason" value="">
+                                        </form>
                                         </div>
                                     @endforeach
                                 </tbody>
@@ -138,6 +150,89 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+
+<!-- Cancel modal (single) -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Cancel Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="cancelReason" class="form-label">Reason for cancellation (will be saved in purpose)</label>
+                    <textarea id="cancelReason" class="form-control" rows="3"></textarea>
+                </div>
+                <input type="hidden" id="cancelBookingId" value="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="confirmCancelBtn">Confirm Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Hide all per-row actions initially
+    document.querySelectorAll('.row-actions').forEach(function(td) {
+        td.classList.add('d-none');
+    });
+
+    // Row click shows actions for that row only
+    document.querySelectorAll('.selectable-row').forEach(function(row) {
+        row.addEventListener('click', function(e) {
+            // If clicked an interactive element (button/link), let it handle the event
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('[data-bs-toggle]')) return;
+
+            // Toggle selection
+            var bookingId = row.getAttribute('data-booking-id');
+
+            // Hide actions on all rows
+            document.querySelectorAll('.row-actions').forEach(function(td) {
+                td.classList.add('d-none');
+            });
+
+            // Show actions for clicked row
+            var actions = row.querySelector('.row-actions');
+            if (actions) {
+                actions.classList.remove('d-none');
+            }
+        });
+    });
+
+    // Wire cancel buttons to populate modal with booking id
+    document.querySelectorAll('.btn-cancel').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            var id = btn.getAttribute('data-booking-id');
+            document.getElementById('cancelBookingId').value = id;
+            // Clear previous reason
+            document.getElementById('cancelReason').value = '';
+        });
+    });
+
+    // Confirm cancel: set hidden form value and submit per-row form
+    document.getElementById('confirmCancelBtn').addEventListener('click', function() {
+        var bookingId = document.getElementById('cancelBookingId').value;
+        var reason = document.getElementById('cancelReason').value || 'Cancelled by user';
+        var form = document.getElementById('deleteForm' + bookingId);
+        if (!form) {
+            console.error('Delete form not found for booking', bookingId);
+            return;
+        }
+        // set hidden input
+        var input = form.querySelector('input[name="cancellation_reason"]');
+        if (input) input.value = reason;
+        // Submit the form
+        form.submit();
+    });
+});
+</script>
 @endsection
 
 
