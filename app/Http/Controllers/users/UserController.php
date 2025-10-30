@@ -13,7 +13,7 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function index() {
-        return view('auth');
+        return view('forms.auth');
     }
 
     public function register(RegisterRequest $request) {

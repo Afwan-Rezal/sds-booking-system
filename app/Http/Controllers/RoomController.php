@@ -26,7 +26,7 @@ class RoomController extends Controller
 
         $result = $this->roomViewBuilder->buildRoomViewData($rooms);
 
-        return view('room_listing', [
+        return view('lists.room_listing', [
             'rooms' => $rooms,
             'roomView' => $result['roomView'],
             'now' => $result['now'],
@@ -41,7 +41,7 @@ class RoomController extends Controller
         } else
         {
             $selectedRoom = Room::findOrFail($roomId);
-            return view('room_booking', compact('selectedRoom'));
+            return view('forms.room_booking', compact('selectedRoom'));
         }
     }
 
@@ -78,7 +78,7 @@ class RoomController extends Controller
             ->orderBy('start_time', 'desc')
             ->get();
 
-        return view('booking_list', compact('bookings'));
+        return view('lists.booking_list', compact('bookings'));
     }
                
 }
