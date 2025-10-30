@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\users\UserController;
 use App\Http\Controllers\users\AdminController;
+use App\Http\Controllers\BookingController;
 
 Route::get('/', function () {
     return view('home');
@@ -27,9 +28,9 @@ Route::get('/temporary/dashboard', function () {
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
 Route::get('/rooms/book/{id}', [RoomController::class, 'selectRoom'])->name('rooms.select'); // TODO: Change function name to selectRoom and name to rooms.select
-Route::post('/rooms/book/{id}', [RoomController::class, 'storeBooking'])->name('rooms.storeBooking');
+Route::post('/rooms/book/{id}', [BookingController::class, 'addBooking'])->name('rooms.storeBooking');
 
-Route::get('/my-bookings', [RoomController::class, 'myBookings'])->name('bookings.list')->middleware('auth');
+Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.list')->middleware('auth');
 
 Route::controller(UserController::class)->group(function () {
     Route::get('login', [UserController::class, 'index'])->name('auth');
