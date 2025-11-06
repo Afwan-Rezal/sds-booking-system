@@ -22,7 +22,11 @@ class BookingService
      */
     public function create(array $data, int $userId): Booking
     {
-        $this->validateInput($data);
+        // Validation is now performed by FormRequest (App\Http\Requests\room\BookingRequest)
+        // Keep the old validator available in this service for reference, but do not
+        // run it here to avoid duplicate validation. If you prefer service-level
+        // validation, uncomment the following line.
+        // $this->validateInput($data);
 
         [$start_time, $end_time] = $this->parseTimeSlot($data['time_slot']);
 
@@ -46,6 +50,14 @@ class BookingService
 
     private function validateInput(array $data): void
     {
+        // NOTE: This method contains duplicate validation rules that are now
+        // expressed in App\Http\Requests\room\BookingRequest. The method is
+        // left here for reference and for potential re-use in non-HTTP contexts
+        // (e.g. CLI or background jobs). If you want the service to perform
+        // validation again, uncomment the implementation below and the call in
+        // create().
+
+        /*
         $validator = Validator::make($data, [
             'room_id' => 'required|exists:rooms,id',
             'date' => 'required|date|after_or_equal:today',
@@ -57,6 +69,7 @@ class BookingService
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
+        */
     }
 
     private function parseTimeSlot(string $timeSlot): array

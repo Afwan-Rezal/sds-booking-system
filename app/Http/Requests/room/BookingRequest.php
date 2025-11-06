@@ -26,6 +26,7 @@ class BookingRequest extends FormRequest
             'date' => 'required|date|after_or_equal:today',
             'time_slot' => 'required|string',
             'number_of_people' => 'required|integer|min:1',
+            'purpose' => 'required|string|min:10',
         ];
     }
 
@@ -42,6 +43,9 @@ class BookingRequest extends FormRequest
             'number_of_people.required' => 'Number of people is required',
             'number_of_people.integer' => 'Number of people must be an integer',
             'number_of_people.min' => 'At least one person is required for booking', // To edit
+            'purpose.required' => 'Purpose is required',
+            'purpose.string' => 'Purpose must be text',
+            'purpose.min' => 'Purpose must be at least 10 characters',
         ];
     }
 }
