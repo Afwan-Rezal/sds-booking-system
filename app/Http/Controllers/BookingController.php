@@ -62,22 +62,6 @@ class BookingController extends Controller
         return view('forms.edit_booking', compact('booking'));
     }
 
-    // public function updateBooking(Request $request, $id)
-    // {
-    //     $booking = Booking::findOrFail($id);
-    //     if (Auth::id() !== $booking->user_id) {
-    //         abort(403);
-    //     }
-    //     $data = $request->validate([
-    //         'date' => 'required|date',
-    //         'time_slot' => 'required',
-    //         'number_of_people' => 'required|integer|min:1',
-    //         'purpose' => 'required|string'
-    //     ]);
-    //     $booking->update($data);
-    //     return redirect()->route('bookings.list')->with('success', 'Booking updated successfully!');
-    // }
-
     public function updateBooking(Request $request, $id)
     {
         $booking = Booking::findOrFail($id);
