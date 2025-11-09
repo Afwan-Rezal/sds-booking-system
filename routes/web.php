@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\users\UserController;
 use App\Http\Controllers\users\AdminController;
