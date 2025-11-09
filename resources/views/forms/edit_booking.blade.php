@@ -42,7 +42,7 @@
     </form>
     <form method="POST" action="{{ route('bookings.delete', $booking->id) }}" class="mt-2">
         @csrf
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this booking?');">Delete Booking</button>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel Booking</button>
     </form>
     <div class="mt-3">
         <a href="{{ route('bookings.list') }}" class="btn btn-secondary">Back to My Bookings</a>

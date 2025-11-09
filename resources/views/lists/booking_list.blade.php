@@ -63,11 +63,11 @@
                                             </td>
                                             <td>{{ $booking->created_at->format('Y-m-d H:i') }}</td>
                                             <td class="row-actions" style="white-space:nowrap;">
-                                                @if($booking->status !== 'completed' && $booking->status !== 'rejected')
+                                                @if($booking->status !== 'completed' && $booking->status !== 'rejected' && $booking->status !== 'cancelled')
                                                     <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-primary me-1">Edit</a>
-                                                    <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+                                                    {{-- <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button> --}}
                                                 @else
-                                                    <span class="text-muted">No actions available</span>
+                                                    <span class="text-muted">Actions unavailable</span>
                                                 @endif
                                             </td>
                                         </tr>
