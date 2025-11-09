@@ -48,6 +48,46 @@ class BookingService
         return $this->createBookingRecord($data, $userId, $start_time, $end_time, $status);
     }
 
+    public function update(Booking $booking, array $data, int $userId): Booking
+    {
+        [$start_time, $end_time] = $this->parseTimeSlot($data['time_slot']);
+
+        $now = now();
+        $this->ensureFutureWindow($data['date'], $start_time, $now);
+        $this->ensureLeadTime($data['date'], $start_time, $now);
+
+        // Avoid checking against the same booking when verifying availability
+        $existingBooking = DB::table('bookings')
+            ->where('room_id', $booking->room_id)
+            ->where('date', $data['date'])
+            ->where('start_time', $start_time)
+            ->where('end_time', $end_time)
+            ->where('status', 'approved')
+            ->where('id', '!=', $booking->id)
+            ->first();
+
+        if ($existingBooking) {
+            throw ValidationException::withMessages([
+                'time_slot' => ['Room is already booked for the selected date and time slot.'],
+            ]);
+        }
+
+        $room = $this->loadRoomWithCapacity((int) $booking->room_id);
+        $this->enforceCapacityBounds($room, (int) $data['number_of_people']);
+
+        $booking->update([
+            'date'       => $data['date'],
+            'time_slot'  => $data['time_slot'],
+            'start_time' => $start_time,
+            'end_time'   => $end_time,
+            'number_of_people' => $data['number_of_people'],
+            'purpose'    => $data['purpose'],
+        ]);
+
+        return $booking;
+    }
+
+
     private function validateInput(array $data): void
     {
         // NOTE: This method contains duplicate validation rules that are now
