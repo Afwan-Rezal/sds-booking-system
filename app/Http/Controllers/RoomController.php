@@ -42,6 +42,14 @@ class RoomController extends Controller
             return redirect()->route('auth')->with('error', 'You must be logged in to book a room.');
         } else
         {
+            // Check if user has reached booking limit
+            $activeBookingsCount = $this->bookingService->getActiveBookingsCount(Auth::id());
+            
+            if ($activeBookingsCount >= 3) { // Hardcoded booking limit for now
+                return redirect()->route('rooms.index')
+                    ->withErrors(['booking_limit' => 'You have reached the maximum limit of 3 active bookings. Please wait for your existing bookings to be completed or cancelled before making a new booking request.']);
+            }
+            
             $selectedRoom = Room::findOrFail($roomId);
             return view('forms.room_booking', compact('selectedRoom'));
         }

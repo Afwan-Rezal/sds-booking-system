@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\users;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\auth\RegisterRequest;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 
 class UserController extends Controller

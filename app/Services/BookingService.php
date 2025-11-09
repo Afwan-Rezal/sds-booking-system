@@ -22,7 +22,11 @@ class BookingService
      */
     public function create(array $data, int $userId): Booking
     {
-        $this->validateInput($data);
+        // Validation is now performed by FormRequest (App\Http\Requests\room\BookingRequest)
+        // Keep the old validator available in this service for reference, but do not
+        // run it here to avoid duplicate validation. If you prefer service-level
+        // validation, uncomment the following line.
+        // $this->validateInput($data);
 
         [$start_time, $end_time] = $this->parseTimeSlot($data['time_slot']);
 
@@ -37,6 +41,9 @@ class BookingService
 
         $this->enforceCapacityBounds($room, (int) $data['number_of_people']);
 
+        // Check booking limit before creating new booking
+        $this->ensureBookingLimit($userId);
+
         // Determine status based on user role
         $userRole = $this->getUserRole($userId);
         $status = ($userRole === 'admin') ? 'approved' : 'pending';
@@ -44,8 +51,56 @@ class BookingService
         return $this->createBookingRecord($data, $userId, $start_time, $end_time, $status);
     }
 
+    public function update(Booking $booking, array $data, int $userId): Booking
+    {
+        [$start_time, $end_time] = $this->parseTimeSlot($data['time_slot']);
+
+        $now = now();
+        $this->ensureFutureWindow($data['date'], $start_time, $now);
+        $this->ensureLeadTime($data['date'], $start_time, $now);
+
+        // Avoid checking against the same booking when verifying availability
+        $existingBooking = DB::table('bookings')
+            ->where('room_id', $booking->room_id)
+            ->where('date', $data['date'])
+            ->where('start_time', $start_time)
+            ->where('end_time', $end_time)
+            ->where('status', 'approved')
+            ->where('id', '!=', $booking->id)
+            ->first();
+
+        if ($existingBooking) {
+            throw ValidationException::withMessages([
+                'time_slot' => ['Room is already booked for the selected date and time slot.'],
+            ]);
+        }
+
+        $room = $this->loadRoomWithCapacity((int) $booking->room_id);
+        $this->enforceCapacityBounds($room, (int) $data['number_of_people']);
+
+        $booking->update([
+            'date'       => $data['date'],
+            'time_slot'  => $data['time_slot'],
+            'start_time' => $start_time,
+            'end_time'   => $end_time,
+            'number_of_people' => $data['number_of_people'],
+            'purpose'    => $data['purpose'],
+        ]);
+
+        return $booking;
+    }
+
+
     private function validateInput(array $data): void
     {
+        // NOTE: This method contains duplicate validation rules that are now
+        // expressed in App\Http\Requests\room\BookingRequest. The method is
+        // left here for reference and for potential re-use in non-HTTP contexts
+        // (e.g. CLI or background jobs). If you want the service to perform
+        // validation again, uncomment the implementation below and the call in
+        // create().
+
+        /*
         $validator = Validator::make($data, [
             'room_id' => 'required|exists:rooms,id',
             'date' => 'required|date|after_or_equal:today',
@@ -57,6 +112,7 @@ class BookingService
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
+        */
     }
 
     private function parseTimeSlot(string $timeSlot): array
@@ -177,6 +233,79 @@ class BookingService
             'number_of_people' => $data['number_of_people'],
             'purpose'    => $data['purpose'],
         ]);
+    }
+
+    /**
+     * Automatically mark past approved bookings as completed.
+     * 
+     * @param int|null $userId If provided, only complete bookings for this user. If null, complete all past bookings.
+     * @return void
+     */
+    public function autoCompletePastBookings(?int $userId = null): void
+    {
+        $now = Carbon::now();
+        
+        $query = Booking::where('status', 'approved');
+
+        if ($userId !== null) {
+            $query->where('user_id', $userId);
+        }
+
+        $bookings = $query->get();
+        
+        $pastBookings = $bookings->filter(function ($booking) use ($now) {
+            $bookingDateTime = Carbon::parse($booking->date . ' ' . $booking->end_time);
+            return $bookingDateTime->lt($now);
+        });
+
+        $bookingIds = $pastBookings->pluck('id');
+        
+        if ($bookingIds->isNotEmpty()) {
+            Booking::whereIn('id', $bookingIds)->update(['status' => 'completed']);
+        }
+    }
+
+    /**
+     * Ensure user has not reached the booking limit (3 active bookings).
+     * Active bookings are those with status 'approved' or 'pending'.
+     * Rejected and completed bookings do not count toward the limit.
+     * 
+     * @param int $userId
+     * @return void
+     * @throws ValidationException
+     */
+    private function ensureBookingLimit(int $userId): void
+    {
+        // First, auto-complete any past bookings for this user to ensure accurate count
+        $this->autoCompletePastBookings($userId);
+
+        // Count active bookings (approved or pending only)
+        $activeBookingsCount = Booking::where('user_id', $userId)
+            ->whereIn('status', ['approved', 'pending'])
+            ->count();
+
+        if ($activeBookingsCount >= 3) {
+            throw ValidationException::withMessages([
+                'booking_limit' => ['You have reached the maximum limit of 3 active bookings. Please wait for your existing bookings to be completed or cancelled before making a new booking request.'],
+            ]);
+        }
+    }
+
+    /**
+     * Get the count of active bookings for a user.
+     * Active bookings are those with status 'approved' or 'pending'.
+     * 
+     * @param int $userId
+     * @return int
+     */
+    public function getActiveBookingsCount(int $userId): int
+    {
+        // First, auto-complete any past bookings for this user to ensure accurate count
+        $this->autoCompletePastBookings($userId);
+
+        return Booking::where('user_id', $userId)
+            ->whereIn('status', ['approved', 'pending'])
+            ->count();
     }
 }
 
