@@ -71,7 +71,7 @@ class BookingController extends Controller
         $data = $request->validate([
             'date' => 'required|date',
             'time_slot' => 'required',
-            'number_of_people' => 'required|integer|min=1',
+            'number_of_people' => 'required|integer|min:1',
             'purpose' => 'required|string'
         ]);
         $booking->update($data);
