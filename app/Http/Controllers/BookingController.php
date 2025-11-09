@@ -24,6 +24,9 @@ class BookingController extends Controller
             return redirect()->route('auth')->with('error', 'You must be logged in to view your bookings.');
         }
 
+        // Auto-complete past bookings for this user
+        $this->bookingService->autoCompletePastBookings(Auth::id());
+
         $bookings = Booking::with(['room.metadata'])
             ->where('user_id', Auth::id())
             ->orderBy('date', 'desc')
@@ -59,6 +62,11 @@ class BookingController extends Controller
         if (Auth::id() !== $booking->user_id) {
             abort(403); // Forbidden
         }
+        // Prevent editing completed or rejected bookings
+        if ($booking->status === 'completed' || $booking->status === 'rejected') {
+            return redirect()->route('bookings.list')
+                ->withErrors(['error' => 'Cannot edit ' . $booking->status . ' bookings.']);
+        }
         return view('forms.edit_booking', compact('booking'));
     }
 
@@ -68,6 +76,12 @@ class BookingController extends Controller
 
         if (Auth::id() !== $booking->user_id) {
             abort(403);
+        }
+
+        // Prevent updating completed or rejected bookings
+        if ($booking->status === 'completed' || $booking->status === 'rejected') {
+            return redirect()->route('bookings.list')
+                ->withErrors(['error' => 'Cannot update ' . $booking->status . ' bookings.']);
         }
 
         $data = $request->validate([
@@ -94,6 +108,12 @@ class BookingController extends Controller
         $booking = Booking::findOrFail($id);
         if (Auth::id() !== $booking->user_id) {
             abort(403);
+        }
+
+        // Prevent cancelling completed or rejected bookings
+        if ($booking->status === 'completed' || $booking->status === 'rejected') {
+            return redirect()->route('bookings.list')
+                ->withErrors(['error' => 'Cannot cancel ' . $booking->status . ' bookings.']);
         }
 
         // We mark the booking as cancelled and store the cancellation reason (if any)

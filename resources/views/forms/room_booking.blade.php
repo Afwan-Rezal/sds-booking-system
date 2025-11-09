@@ -4,6 +4,17 @@
 @section('content')
 <div class="container mt-4">
     <h2>Book a Room</h2>
+    
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    
     <form method="POST" action="{{ route('rooms.storeBooking', $selectedRoom->id)}}">
         @csrf
 
@@ -12,18 +23,27 @@
 
         <div class="mb-3">
             <label for="date" class="form-label">Date</label>
-            <input type="date" name="date" id="date" class="form-control" value="{{ old('date') }}" required>
+            <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" value="{{ old('date') }}" required>
+            @error('date')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="time_slot" class="form-label">Time Slot</label>
-            <select name="time_slot" id="time_slot" class="form-select" required>
+            <select name="time_slot" id="time_slot" class="form-select @error('time_slot') is-invalid @enderror" required>
                 <option value="">Select a time slot</option>
                 <option value="07:50:00-09:40:00" {{ old('time_slot') == '07:50:00-09:40:00' ? 'selected' : '' }}>07:50 - 09:40</option>
                 <option value="09:50:00-11:40:00" {{ old('time_slot') == '09:50:00-11:40:00' ? 'selected' : '' }}>09:50 - 11:40</option>
                 <option value="11:50:00-13:40:00" {{ old('time_slot') == '11:50:00-13:40:00' ? 'selected' : '' }}>11:50 - 13:40</option>
                 <option value="14:10:00-16:00:00" {{ old('time_slot') == '14:10:00-16:00:00' ? 'selected' : '' }}>14:10 - 16:00</option>
             </select>
+            @error('time_slot')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+            @error('booking_limit')
+                <div class="text-danger mt-1">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">

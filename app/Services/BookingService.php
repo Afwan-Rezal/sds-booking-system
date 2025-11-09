@@ -41,6 +41,9 @@ class BookingService
 
         $this->enforceCapacityBounds($room, (int) $data['number_of_people']);
 
+        // Check booking limit before creating new booking
+        $this->ensureBookingLimit($userId);
+
         // Determine status based on user role
         $userRole = $this->getUserRole($userId);
         $status = ($userRole === 'admin') ? 'approved' : 'pending';
@@ -230,6 +233,79 @@ class BookingService
             'number_of_people' => $data['number_of_people'],
             'purpose'    => $data['purpose'],
         ]);
+    }
+
+    /**
+     * Automatically mark past approved bookings as completed.
+     * 
+     * @param int|null $userId If provided, only complete bookings for this user. If null, complete all past bookings.
+     * @return void
+     */
+    public function autoCompletePastBookings(?int $userId = null): void
+    {
+        $now = Carbon::now();
+        
+        $query = Booking::where('status', 'approved');
+
+        if ($userId !== null) {
+            $query->where('user_id', $userId);
+        }
+
+        $bookings = $query->get();
+        
+        $pastBookings = $bookings->filter(function ($booking) use ($now) {
+            $bookingDateTime = Carbon::parse($booking->date . ' ' . $booking->end_time);
+            return $bookingDateTime->lt($now);
+        });
+
+        $bookingIds = $pastBookings->pluck('id');
+        
+        if ($bookingIds->isNotEmpty()) {
+            Booking::whereIn('id', $bookingIds)->update(['status' => 'completed']);
+        }
+    }
+
+    /**
+     * Ensure user has not reached the booking limit (3 active bookings).
+     * Active bookings are those with status 'approved' or 'pending'.
+     * Rejected and completed bookings do not count toward the limit.
+     * 
+     * @param int $userId
+     * @return void
+     * @throws ValidationException
+     */
+    private function ensureBookingLimit(int $userId): void
+    {
+        // First, auto-complete any past bookings for this user to ensure accurate count
+        $this->autoCompletePastBookings($userId);
+
+        // Count active bookings (approved or pending only)
+        $activeBookingsCount = Booking::where('user_id', $userId)
+            ->whereIn('status', ['approved', 'pending'])
+            ->count();
+
+        if ($activeBookingsCount >= 3) {
+            throw ValidationException::withMessages([
+                'booking_limit' => ['You have reached the maximum limit of 3 active bookings. Please wait for your existing bookings to be completed or cancelled before making a new booking request.'],
+            ]);
+        }
+    }
+
+    /**
+     * Get the count of active bookings for a user.
+     * Active bookings are those with status 'approved' or 'pending'.
+     * 
+     * @param int $userId
+     * @return int
+     */
+    public function getActiveBookingsCount(int $userId): int
+    {
+        // First, auto-complete any past bookings for this user to ensure accurate count
+        $this->autoCompletePastBookings($userId);
+
+        return Booking::where('user_id', $userId)
+            ->whereIn('status', ['approved', 'pending'])
+            ->count();
     }
 }
 

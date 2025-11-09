@@ -55,14 +55,20 @@
                                                     <span class="badge bg-warning text-dark">Pending</span>
                                                 @elseif($booking->status === 'rejected')
                                                     <span class="badge bg-danger">Rejected</span>
+                                                @elseif($booking->status === 'completed')
+                                                    <span class="badge bg-info">Completed</span>
                                                 @else
                                                     <span class="badge bg-secondary">{{ ucfirst($booking->status) }}</span>
                                                 @endif
                                             </td>
                                             <td>{{ $booking->created_at->format('Y-m-d H:i') }}</td>
                                             <td class="row-actions" style="white-space:nowrap;">
-                                                <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-primary me-1">Edit</a>
-                                                <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+                                                @if($booking->status !== 'completed' && $booking->status !== 'rejected')
+                                                    <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-primary me-1">Edit</a>
+                                                    <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+                                                @else
+                                                    <span class="text-muted">No actions available</span>
+                                                @endif
                                             </td>
                                         </tr>
 
@@ -97,7 +103,7 @@
 
                         <!-- Summary Cards -->
                         <div class="row mt-4">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="card bg-success text-white">
                                     <div class="card-body">
                                         <h5 class="card-title">Approved</h5>
@@ -105,7 +111,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="card bg-warning text-dark">
                                     <div class="card-body">
                                         <h5 class="card-title">Pending</h5>
@@ -113,11 +119,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="card bg-danger text-white">
                                     <div class="card-body">
                                         <h5 class="card-title">Rejected</h5>
                                         <h2>{{ $bookings->where('status', 'rejected')->count() }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Completed</h5>
+                                        <h2>{{ $bookings->where('status', 'completed')->count() }}</h2>
                                     </div>
                                 </div>
                             </div>
