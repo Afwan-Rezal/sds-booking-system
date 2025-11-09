@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Services\BookingService;
-
-use Illuminate\Http\Request;
 use App\Http\Requests\room\BookingRequest;
+use App\Mail\BookingPendingApprovalMail;
+
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -38,21 +40,36 @@ class BookingController extends Controller
 
     public function addBooking(BookingRequest $request)
     {
+        
         try {
             // Use the validated data from the BookingRequest FormRequest
             $data = $request->validated();
-            $this->bookingService->create($data, Auth::id());
+            // Capture the created Booking so we can access related data (e.g. room name)
+            $booking = $this->bookingService->create($data, Auth::id());
+            // Ensure the room relation is loaded for the mail payload
+            $booking->load('room');
             $user = Auth::user();
             $role = strtolower($user->profile->role ?? '');
+            $mailData =[
+                // Use the room name from the saved booking when available
+                "room" => $booking->room->name ?? ($data['room_id'] ?? 'Room'),
+                "date" => $data['date'],
+                "time" => $data['time_slot'],
+                "name" => $user->profile->full_name,
+            ];
+
             if ($role === 'admin') {
                 $message = 'Room booked successfully!';
             } else {
                 $message = 'Booking request submitted successfully! It is pending admin approval.';
+                // Send pendingApproval email
+                Mail::to($user->email)->send(new BookingPendingApprovalMail($mailData));
             }
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         }
         return redirect()->route('rooms.index')->with('success', $message);
+        // return dd($mailData);
     }
 
     public function selectBooking($id)
