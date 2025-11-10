@@ -90,7 +90,7 @@ The system will be extended with features such as role-based permissions, bookin
 
     -   Users should be restricted to a maximum number of bookings per week (e.g., 3 active bookings at a time) to prevent misuse of the system.
 
--   [ ] **Room Maintenance and Blackout Periods**
+-   [x] **Room Maintenance and Blackout Periods**
     -   Admins must be able to block certain rooms for maintenance or special events.
     -   During these periods, no bookings can be made.
 
