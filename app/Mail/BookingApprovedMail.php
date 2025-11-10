@@ -46,8 +46,6 @@ class BookingApprovedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            // Blade view path should be relative to resources/views and use dot notation
-            // For resources/views/mail/booking_approved_mail.blade.php use 'mail.booking_approved_mail'
             view: 'mail.booking_approved_mail',
             with: [
                 'mailData' => $this->mailData,
