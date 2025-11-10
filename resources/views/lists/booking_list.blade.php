@@ -6,13 +6,6 @@
     <div class="row">
         <div class="col-12">
             <h2 class="mb-4">My Bookings</h2>
-            
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
 
             @if($bookings->count() > 0)
                 <div class="card">

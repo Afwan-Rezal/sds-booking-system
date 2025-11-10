@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Services\BookingService;
 use App\Http\Requests\room\BookingRequest;
 
+use App\Mail\BookingCancelledMail;
 use App\Mail\BookingPendingApprovalMail;
 use App\Mail\BookingUpdatedMail;
 
@@ -131,7 +132,6 @@ class BookingController extends Controller
 
     public function cancelBooking(Request $request, $id)
     {
-        // TODO: Refractor cancelService
         $booking = Booking::findOrFail($id);
         if (Auth::id() !== $booking->user_id) {
             abort(403);
@@ -151,9 +151,20 @@ class BookingController extends Controller
             // Option: preserve original purpose and prepend cancellation note
             $booking->purpose = 'Cancelled: ' . $reason . '\n\nPrevious purpose:\n' . ($booking->purpose ?? '');
         }
-        return dd($booking->purpose);
-        // $booking->save();
+        // return dd($booking->purpose);
+        $booking->save();
 
-        // return redirect()->route('bookings.list')->with('success', 'Booking cancelled successfully!');
+        // Implement mail logic here!
+        $mailData = [
+            "name" => $booking->user->profile['full_name'],
+            "date" => $booking->date,
+            "time_slot" => Carbon::parse($booking->start_time)->format('H:i') . ' - ' . Carbon::parse($booking->end_time)->format('H:i'),
+            "room" => $booking->room->name,
+            "reason" => $booking->purpose ?? 'No reason provided',
+        ];
+
+        Mail::to($booking->user->email)->send(new BookingCancelledMail($mailData));
+
+        return redirect()->route('bookings.list')->with('success', 'Booking cancelled successfully!');
     }
 }
