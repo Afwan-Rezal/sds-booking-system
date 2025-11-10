@@ -129,7 +129,7 @@ class BookingController extends Controller
             ->with('success', 'Booking updated successfully!');
     }
 
-    public function deleteBooking(Request $request, $id)
+    public function cancelBooking(Request $request, $id)
     {
         $booking = Booking::findOrFail($id);
         if (Auth::id() !== $booking->user_id) {

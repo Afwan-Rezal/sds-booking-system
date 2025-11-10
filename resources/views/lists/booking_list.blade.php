@@ -91,7 +91,7 @@
                                         </div>
 
                                         <!-- Hidden cancellation form for this booking -->
-                                        <form id="deleteForm{{ $booking->id }}" action="{{ route('bookings.delete', $booking->id) }}" method="POST" style="display:none;">
+                                        <form id="deleteForm{{ $booking->id }}" action="{{ route('bookings.cancel', $booking->id) }}" method="POST" style="display:none;">
                                             @csrf
                                             <input type="hidden" name="cancellation_reason" value="">
                                         </form>

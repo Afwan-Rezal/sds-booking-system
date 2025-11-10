@@ -40,7 +40,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
-    <form method="POST" action="{{ route('bookings.delete', $booking->id) }}" class="mt-2">
+    <form method="POST" action="{{ route('bookings.cancel', $booking->id) }}" class="mt-2">
         @csrf
         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel Booking</button>
     </form>
