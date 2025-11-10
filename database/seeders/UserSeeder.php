@@ -17,8 +17,8 @@ class UserSeeder extends Seeder
             [
                 'id' => 1,
                 'username' => 'admin',
-                'email' => 'admin@mail.com',
-                'password' => bcrypt('12345678'), 
+                'email' => 'afwanrezal.dev@gmail.com',
+                'password' => bcrypt('AwanAdmin'), 
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
             [
                 'id' => 3,
                 'username' => '21B6027',
-                'email' => '21B6027@mail.com',
+                'email' => 'afwan.rezal@gmail.com',
                 'password' => bcrypt('12345678'),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
         DB::table('user_profiles')->insert([
             [
                 'user_id' => 1,
-                'full_name' => 'Abdullah Admin',
+                'full_name' => 'Afwan Rezal Admin',
                 'role' => 'admin',
                 'gender' => 'M',
                 'created_at' => now(),
