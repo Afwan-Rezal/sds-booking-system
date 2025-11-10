@@ -8,17 +8,21 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
 
 class BookingCancelledMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $mailData;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(array $mailData)
     {
         //
+        $this->mailData = $mailData;
     }
 
     /**
@@ -26,8 +30,14 @@ class BookingCancelledMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $fromEmail = $this->mailData['from_email'] ?? 'noreply@sds-booking.com';
+        $fromName = $this->mailData['from_name'] ?? 'SDS Booking System';
+
+        $subjectPrefix = $this->mailData['room'] ?? '';
+    
         return new Envelope(
-            subject: 'Booking Cancelled Mail',
+            from: new Address($fromEmail, $fromName),
+            subject: trim("{$subjectPrefix} Booking Cancelled Mail"),
         );
     }
 
@@ -37,7 +47,10 @@ class BookingCancelledMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.booking_cancelled_mail',
+            with: [
+                'mailData' => $this->mailData,
+            ],
         );
     }
 

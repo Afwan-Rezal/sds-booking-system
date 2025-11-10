@@ -42,6 +42,11 @@
     </form>
     <form method="POST" action="{{ route('bookings.cancel', $booking->id) }}" class="mt-2">
         @csrf
+        <div class="mb-3">
+            <label for="cancellation_reason" class="form-label">Reason for cancellation</label>
+            <textarea name="cancellation_reason" id="cancellation_reason" class="form-control" rows="3">{{ old('cancellation_reason', $booking->purpose) }}</textarea>
+            <div class="form-text">This reason will be saved with the booking as the cancellation note.</div>
+        </div>
         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel Booking</button>
     </form>
     <div class="mt-3">

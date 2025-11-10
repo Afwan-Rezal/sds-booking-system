@@ -131,6 +131,7 @@ class BookingController extends Controller
 
     public function cancelBooking(Request $request, $id)
     {
+        // TODO: Refractor cancelService
         $booking = Booking::findOrFail($id);
         if (Auth::id() !== $booking->user_id) {
             abort(403);
@@ -150,8 +151,9 @@ class BookingController extends Controller
             // Option: preserve original purpose and prepend cancellation note
             $booking->purpose = 'Cancelled: ' . $reason . '\n\nPrevious purpose:\n' . ($booking->purpose ?? '');
         }
-        $booking->save();
+        return dd($booking->purpose);
+        // $booking->save();
 
-        return redirect()->route('bookings.list')->with('success', 'Booking cancelled successfully!');
+        // return redirect()->route('bookings.list')->with('success', 'Booking cancelled successfully!');
     }
 }
