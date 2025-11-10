@@ -8,16 +8,28 @@
             @foreach($rooms as $room)
                 <div class="container mb-3 p-3 border rounded">
                     <h5>Room Name: {{ $room->name ?? 'N/A' }}</h5>
-                    <p>Status: {{ $room->is_available ? 'Available For Use' : 'Under Maintenance' }}</p>
+                    @php($meta = $room->metadata)
+                    @php($isBlocked = optional($meta)->is_blocked)
+                    <p>Status: 
+                        @if($isBlocked)
+                            <span class="text-danger">Blocked</span>
+                        @else
+                            <span class="text-success">Available For Use</span>
+                        @endif
+                    </p>
 
                     {{-- Room metadata details --}}
-                    @php($meta = $room->metadata)
                     <div class="mb-2">
                         <p class="mb-1"><strong>Capacity:</strong> {{ optional($meta)->capacity ?? 'N/A' }}</p>
                         <p class="mb-1"><strong>Type:</strong> {{ optional($meta)->type ?? 'N/A' }}</p>
                         <p class="mb-1"><strong>Location:</strong> {{ optional($meta)->location ?? 'N/A' }}</p>
                         @if(optional($meta)->description)
                             <p class="mb-1"><strong>Description:</strong> {{ $meta->description }}</p>
+                        @endif
+                        @if($isBlocked && optional($meta)->blocked_reason)
+                            <p class="mb-1 text-danger"><strong>Blocked Reason:</strong> {{ $meta->blocked_reason }}</p>
+                        @elseif($isBlocked)
+                            <p class="mb-1 text-danger"><strong>Blocked Reason:</strong> Not specified</p>
                         @endif
                     </div>
 
@@ -51,9 +63,9 @@
                         </div>
                     @endif
 
-                    @if($room->is_available == false)
-                        <p class="text-danger">This room is currently under maintenance and cannot be booked.</p>
-                        <a href="{{ route('rooms.select', ['id' => $room->id]) }}" class="btn btn-secondary" style="pointer-events: none; opacity: 0.5;">
+                    @if($isBlocked)
+                        <p class="text-danger">This room is blocked and cannot be booked at the moment.</p>
+                        <a href="#" class="btn btn-secondary disabled" aria-disabled="true">
                             Book
                         </a>
                     @else

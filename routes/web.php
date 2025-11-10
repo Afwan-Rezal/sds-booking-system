@@ -45,7 +45,7 @@ Route::controller(UserController::class)->group(function () {
 });
 
 // Admin management routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'showUsers'])->name('admin.users');
     Route::get('/admin/pending-staff', [AdminController::class, 'showPendingStaff'])->name('admin.pending_staff');
     Route::post('/admin/approve-staff/{user}', [AdminController::class, 'approveStaff'])->name('admin.approve_staff');
@@ -55,4 +55,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/pending-bookings', [AdminController::class, 'showPendingBookings'])->name('admin.pending_bookings');
     Route::post('/admin/approve-booking/{booking}', [AdminController::class, 'approveBooking'])->name('admin.approve_booking');
     Route::post('/admin/reject-booking/{booking}', [AdminController::class, 'rejectBooking'])->name('admin.reject_booking');
+
+    Route::get('/admin/rooms', [AdminController::class, 'showRooms'])->name('admin.rooms');
+    Route::get('/admin/rooms/{room}/block', [AdminController::class, 'showBlockForm'])->name('admin.rooms.block');
+    Route::post('/admin/rooms/{room}/block', [AdminController::class, 'blockRoom'])->name('admin.rooms.block.store');
+    Route::post('/admin/rooms/{room}/unblock', [AdminController::class, 'unblockRoom'])->name('admin.rooms.unblock');
 });

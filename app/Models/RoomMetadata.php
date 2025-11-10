@@ -13,7 +13,13 @@ class RoomMetadata extends Model
         'type',
         'location',
         'description',
+        'is_blocked',
+        'blocked_reason',
         // Add other columns if present
+    ];
+
+    protected $casts = [
+        'is_blocked' => 'boolean',
     ];
 
     // If you have timestamps in your migration, leave this as true (default)

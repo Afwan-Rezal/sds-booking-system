@@ -13,7 +13,6 @@ class Room extends Model
     // Mass assignable attributes
     protected $fillable = [
         'name',
-        'is_available',
         'room_metadata_id', // if you have this column
     ];
 

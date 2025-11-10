@@ -26,21 +26,15 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Room Management</h5>
-                            <p class="card-text">Manage rooms and their availability.</p>
-                            <a href="{{ route('rooms.index') }}" class="btn btn-primary">View Rooms</a>
+                            <p class="card-text">Manage rooms, block/unblock, and view details.</p>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('admin.rooms') }}" class="btn btn-primary">Manage Rooms</a>
+                                <a href="{{ route('rooms.index') }}" class="btn btn-outline-secondary">Public Room List</a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Pending Bookings</h5>
-                            <p class="card-text">Review and approve booking requests.</p>
-                            <a href="{{ route('admin.pending_bookings') }}" class="btn btn-warning">View Pending Bookings</a>
-                        </div>
-                    </div>
-                </div>
                 
                 <div class="col-md-4">
                     <div class="card">
@@ -58,6 +52,16 @@
                             <h5 class="card-title">Users</h5>
                             <p class="card-text">View all users in the system.</p>
                             <a href="{{ route('admin.users') }}" class="btn btn-primary">View All Users</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pending Bookings</h5>
+                            <p class="card-text">Review and approve booking requests.</p>
+                            <a href="{{ route('admin.pending_bookings') }}" class="btn btn-warning">View Pending Bookings</a>
                         </div>
                     </div>
                 </div>

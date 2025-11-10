@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Models\User;
 use App\Models\Booking;
+use App\Models\Room;
 
 use App\Mail\BookingApprovedMail;
 use Throwable;
@@ -69,6 +70,84 @@ class AdminController extends Controller
             ->get();
         
         return view('admin.pending_bookings', compact('bookings'));
+    }
+
+    public function showRooms()
+    {
+        $rooms = Room::with('metadata')->orderBy('name')->get();
+
+        return view('admin.rooms', compact('rooms'));
+    }
+
+    public function showBlockForm(Room $room)
+    {
+        $room->load('metadata');
+
+        if (! $room->metadata) {
+            return redirect()->route('admin.rooms')->withErrors([
+                'room' => 'Room metadata is missing. Please contact a system administrator.',
+            ]);
+        }
+
+        if ($room->metadata->is_blocked) {
+            return redirect()->route('admin.rooms')->withErrors([
+                'room' => 'Room is already blocked.',
+            ]);
+        }
+
+        return view('admin.block_room', compact('room'));
+    }
+
+    public function blockRoom(Request $request, Room $room)
+    {
+        $room->load('metadata');
+
+        if (! $room->metadata) {
+            return redirect()->route('admin.rooms')->withErrors([
+                'room' => 'Room metadata is missing. Please contact a system administrator.',
+            ]);
+        }
+
+        if ($room->metadata->is_blocked) {
+            return redirect()->route('admin.rooms')->withErrors([
+                'room' => 'Room is already blocked.',
+            ]);
+        }
+
+        $validated = $request->validate([
+            'blocked_reason' => ['required', 'string', 'min:5', 'max:500'],
+        ]);
+
+        $room->metadata->update([
+            'is_blocked' => true,
+            'blocked_reason' => $validated['blocked_reason'],
+        ]);
+
+        return redirect()->route('admin.rooms')->with('success', 'Room has been blocked successfully.');
+    }
+
+    public function unblockRoom(Request $request, Room $room)
+    {
+        $room->load('metadata');
+
+        if (! $room->metadata) {
+            return redirect()->route('admin.rooms')->withErrors([
+                'room' => 'Room metadata is missing. Please contact a system administrator.',
+            ]);
+        }
+
+        if (! $room->metadata->is_blocked) {
+            return redirect()->route('admin.rooms')->withErrors([
+                'room' => 'Room is not currently blocked.',
+            ]);
+        }
+
+        $room->metadata->update([
+            'is_blocked' => false,
+            'blocked_reason' => null,
+        ]);
+
+        return redirect()->route('admin.rooms')->with('success', 'Room has been unblocked successfully.');
     }
 
     public function approveBooking(Request $request, $bookingId)
