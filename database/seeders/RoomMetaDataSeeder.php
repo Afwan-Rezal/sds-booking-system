@@ -93,7 +93,7 @@ class RoomMetaDataSeeder extends Seeder
 
             [
                 'id' => 12,
-                'capacity' => 0,
+                'capacity' => 15,
                 'type' => 'Tutorial Room',
                 'location' => 'Ground Floor',
             ],
