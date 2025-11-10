@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Services\BookingService;
 use App\Http\Requests\room\BookingRequest;
+
 use App\Mail\BookingPendingApprovalMail;
+use App\Mail\BookingUpdatedMail;
 
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -62,14 +64,13 @@ class BookingController extends Controller
                 $message = 'Room booked successfully!';
             } else {
                 $message = 'Booking request submitted successfully! It is pending admin approval.';
-                // Send pendingApproval email
                 Mail::to($user->email)->send(new BookingPendingApprovalMail($mailData));
             }
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         }
         return redirect()->route('rooms.index')->with('success', $message);
-        // return dd($mailData);
+
     }
 
     public function selectBooking($id)
@@ -108,9 +109,17 @@ class BookingController extends Controller
             'purpose' => 'required|string'
         ]);
 
+        $mailData =[
+            "name" => $booking->user->profile['full_name'],
+            "date" => $data['date'],
+            "time_slot" => Carbon::parse($booking->start_time)->format('H:i') . ' - ' . Carbon::parse($booking->end_time)->format('H:i'),
+            "room" => $booking->room->name,
+        ];
+
         try {
             $this->bookingService->update($booking, $data, Auth::id());
-        } catch (\Illuminate\Validation\ValidationException $e) {
+            Mail::to($booking->user->email)->send(new BookingUpdatedMail($mailData));
+        } catch (ValidationException $e) {
             return redirect()->back()
                 ->withErrors($e->errors())
                 ->withInput();

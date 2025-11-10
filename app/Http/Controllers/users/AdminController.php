@@ -98,7 +98,6 @@ class AdminController extends Controller
         $mailData =[
             "name" => $booking->user->profile['full_name'],
             "date" => $booking->date,
-            // Format start/end times using 24-hour H:i format
             "time_slot" => Carbon::parse($booking->start_time)->format('H:i') . ' - ' . Carbon::parse($booking->end_time)->format('H:i'),
             "room" => $booking->room->name,
         ];
