@@ -6,13 +6,6 @@
     <div class="row">
         <div class="col-12">
             <h2 class="mb-4">My Bookings</h2>
-            
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
 
             @if($bookings->count() > 0)
                 <div class="card">
@@ -63,11 +56,11 @@
                                             </td>
                                             <td>{{ $booking->created_at->format('Y-m-d H:i') }}</td>
                                             <td class="row-actions" style="white-space:nowrap;">
-                                                @if($booking->status !== 'completed' && $booking->status !== 'rejected')
+                                                @if($booking->status !== 'completed' && $booking->status !== 'rejected' && $booking->status !== 'cancelled')
                                                     <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-primary me-1">Edit</a>
-                                                    <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+                                                    {{-- <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button> --}}
                                                 @else
-                                                    <span class="text-muted">No actions available</span>
+                                                    <span class="text-muted">Actions unavailable</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -91,7 +84,7 @@
                                         </div>
 
                                         <!-- Hidden cancellation form for this booking -->
-                                        <form id="deleteForm{{ $booking->id }}" action="{{ route('bookings.delete', $booking->id) }}" method="POST" style="display:none;">
+                                        <form id="deleteForm{{ $booking->id }}" action="{{ route('bookings.cancel', $booking->id) }}" method="POST" style="display:none;">
                                             @csrf
                                             <input type="hidden" name="cancellation_reason" value="">
                                         </form>

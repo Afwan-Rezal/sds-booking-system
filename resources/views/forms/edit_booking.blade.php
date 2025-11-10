@@ -5,15 +5,7 @@
 @section('content')
 <div class="container mt-4">
     <h2>Edit Your Booking</h2>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    
     <form method="POST" action="{{ route('bookings.update', $booking->id) }}">
         @csrf
         <div class="mb-3">
@@ -40,9 +32,14 @@
         </div>
         <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
-    <form method="POST" action="{{ route('bookings.delete', $booking->id) }}" class="mt-2">
+    <form method="POST" action="{{ route('bookings.cancel', $booking->id) }}" class="mt-2">
         @csrf
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this booking?');">Delete Booking</button>
+        <div class="mb-3">
+            <label for="cancellation_reason" class="form-label">Reason for cancellation</label>
+            <textarea name="cancellation_reason" id="cancellation_reason" class="form-control" rows="3">{{ old('cancellation_reason', $booking->purpose) }}</textarea>
+            <div class="form-text">This reason will be saved with the booking as the cancellation note.</div>
+        </div>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel Booking</button>
     </form>
     <div class="mt-3">
         <a href="{{ route('bookings.list') }}" class="btn btn-secondary">Back to My Bookings</a>

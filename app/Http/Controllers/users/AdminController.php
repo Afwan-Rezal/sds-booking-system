@@ -4,8 +4,14 @@ namespace App\Http\Controllers\users;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 use App\Models\User;
 use App\Models\Booking;
+
+use App\Mail\BookingApprovedMail;
+use Throwable;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -87,6 +93,21 @@ class AdminController extends Controller
         }
 
         $booking->update(['status' => 'approved']);
+
+        // Send approval email
+        $mailData =[
+            "name" => $booking->user->profile['full_name'],
+            "date" => $booking->date,
+            "time_slot" => Carbon::parse($booking->start_time)->format('H:i') . ' - ' . Carbon::parse($booking->end_time)->format('H:i'),
+            "room" => $booking->room->name,
+        ];
+
+        try{
+            Mail::to($booking->user->email)->send(new BookingApprovedMail($mailData));
+        } catch (Throwable $e) {
+            return back()->withErrors(['error' => 'Failed to send approval email: ' . $e->getMessage()]);
+
+        }
         
         return redirect()->route('admin.pending_bookings')->with('success', 'Booking approved successfully!');
     }

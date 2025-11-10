@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Services\BookingService;
-
-use Illuminate\Http\Request;
 use App\Http\Requests\room\BookingRequest;
+
+use App\Mail\BookingCancelledMail;
+use App\Mail\BookingPendingApprovalMail;
+use App\Mail\BookingUpdatedMail;
+
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -38,21 +43,35 @@ class BookingController extends Controller
 
     public function addBooking(BookingRequest $request)
     {
+        
         try {
             // Use the validated data from the BookingRequest FormRequest
             $data = $request->validated();
-            $this->bookingService->create($data, Auth::id());
+            // Capture the created Booking so we can access related data (e.g. room name)
+            $booking = $this->bookingService->create($data, Auth::id());
+            // Ensure the room relation is loaded for the mail payload
+            $booking->load('room');
             $user = Auth::user();
             $role = strtolower($user->profile->role ?? '');
+            $mailData =[
+                // Use the room name from the saved booking when available
+                "room" => $booking->room->name ?? ($data['room_id'] ?? 'Room'),
+                "date" => $data['date'],
+                "time" => $data['time_slot'],
+                "name" => $user->profile->full_name,
+            ];
+
             if ($role === 'admin') {
                 $message = 'Room booked successfully!';
             } else {
                 $message = 'Booking request submitted successfully! It is pending admin approval.';
+                Mail::to($user->email)->send(new BookingPendingApprovalMail($mailData));
             }
         } catch (ValidationException $e) {
             return back()->withErrors($e->errors())->withInput();
         }
         return redirect()->route('rooms.index')->with('success', $message);
+
     }
 
     public function selectBooking($id)
@@ -91,9 +110,17 @@ class BookingController extends Controller
             'purpose' => 'required|string'
         ]);
 
+        $mailData =[
+            "name" => $booking->user->profile['full_name'],
+            "date" => $data['date'],
+            "time_slot" => Carbon::parse($booking->start_time)->format('H:i') . ' - ' . Carbon::parse($booking->end_time)->format('H:i'),
+            "room" => $booking->room->name,
+        ];
+
         try {
             $this->bookingService->update($booking, $data, Auth::id());
-        } catch (\Illuminate\Validation\ValidationException $e) {
+            Mail::to($booking->user->email)->send(new BookingUpdatedMail($mailData));
+        } catch (ValidationException $e) {
             return redirect()->back()
                 ->withErrors($e->errors())
                 ->withInput();
@@ -103,7 +130,7 @@ class BookingController extends Controller
             ->with('success', 'Booking updated successfully!');
     }
 
-    public function deleteBooking(Request $request, $id)
+    public function cancelBooking(Request $request, $id)
     {
         $booking = Booking::findOrFail($id);
         if (Auth::id() !== $booking->user_id) {
@@ -124,7 +151,19 @@ class BookingController extends Controller
             // Option: preserve original purpose and prepend cancellation note
             $booking->purpose = 'Cancelled: ' . $reason . '\n\nPrevious purpose:\n' . ($booking->purpose ?? '');
         }
+        // return dd($booking->purpose);
         $booking->save();
+
+        // Implement mail logic here!
+        $mailData = [
+            "name" => $booking->user->profile['full_name'],
+            "date" => $booking->date,
+            "time_slot" => Carbon::parse($booking->start_time)->format('H:i') . ' - ' . Carbon::parse($booking->end_time)->format('H:i'),
+            "room" => $booking->room->name,
+            "reason" => $booking->purpose ?? 'No reason provided',
+        ];
+
+        Mail::to($booking->user->email)->send(new BookingCancelledMail($mailData));
 
         return redirect()->route('bookings.list')->with('success', 'Booking cancelled successfully!');
     }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\users\UserController;
 use App\Http\Controllers\users\AdminController;
@@ -34,7 +35,7 @@ Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings.
 
 Route::get('/booking/edit/{id}', [BookingController::class, 'selectBooking'])->name('bookings.edit')->middleware('auth');
 Route::post('/booking/edit/{id}', [BookingController::class, 'updateBooking'])->name('bookings.update')->middleware('auth');
-Route::post('/booking/delete/{id}', [BookingController::class, 'deleteBooking'])->name('bookings.delete')->middleware('auth');
+Route::post('/booking/cancel/{id}', [BookingController::class, 'cancelBooking'])->name('bookings.cancel')->middleware('auth');
 
 Route::controller(UserController::class)->group(function () {
     Route::get('login', [UserController::class, 'index'])->name('auth');
