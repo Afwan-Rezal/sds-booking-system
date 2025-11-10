@@ -164,6 +164,22 @@ class BookingService
         $room = Room::with('metadata')->findOrFail($roomId);
         $capacity = optional($room->metadata)->capacity;
 
+        if ($room->metadata && $room->metadata->is_blocked) {
+            $message = 'Booking is not allowed because this room is currently blocked.';
+            if ($room->metadata->blocked_reason) {
+                $message .= ' Reason: ' . $room->metadata->blocked_reason;
+            }
+
+            throw ValidationException::withMessages([
+                'room_id' => [$message],
+            ]);
+        }
+
+        // The 'is_available' column has been removed. Availability is now
+        // controlled via room metadata (e.g. 'is_blocked'). If you need an
+        // additional maintenance flag, add it to RoomMetadata and check it
+        // here instead.
+
         if (is_null($capacity)) {
             throw ValidationException::withMessages([
                 'room_id' => ['Capacity for the selected room is not defined.'],

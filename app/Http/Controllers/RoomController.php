@@ -50,7 +50,22 @@ class RoomController extends Controller
                     ->withErrors(['booking_limit' => 'You have reached the maximum limit of 3 active bookings. Please wait for your existing bookings to be completed or cancelled before making a new booking request.']);
             }
             
-            $selectedRoom = Room::findOrFail($roomId);
+            $selectedRoom = Room::with('metadata')->findOrFail($roomId);
+
+            if ($selectedRoom->metadata && $selectedRoom->metadata->is_blocked) {
+                $reason = $selectedRoom->metadata->blocked_reason
+                    ? ' Reason: ' . $selectedRoom->metadata->blocked_reason
+                    : '';
+
+                return redirect()->route('rooms.index')
+                    ->withErrors(['room_blocked' => 'This room is currently blocked and cannot be booked.' . $reason]);
+            }
+
+            // The 'is_available' column has been removed. Availability is
+            // determined by room metadata (blocked state). If you require a
+            // separate maintenance flag, add it to RoomMetadata and check it
+            // here.
+
             return view('forms.room_booking', compact('selectedRoom'));
         }
     }

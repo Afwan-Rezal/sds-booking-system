@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(UserSeeder::class);
+        $this->call(RoomMetaDataSeeder::class);
         $this->call(RoomSeeder::class);
     }
 }
