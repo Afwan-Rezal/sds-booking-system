@@ -68,4 +68,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/rooms/{room}/furniture/{roomFurniture}/edit', [AdminController::class, 'editFurniture'])->name('admin.rooms.furniture.edit');
     Route::put('/admin/rooms/{room}/furniture/{roomFurniture}', [AdminController::class, 'updateFurniture'])->name('admin.rooms.furniture.update');
     Route::delete('/admin/rooms/{room}/furniture/{roomFurniture}', [AdminController::class, 'destroyFurniture'])->name('admin.rooms.furniture.destroy');
+
+    // Reports - Room Usage
+    Route::get('/admin/reports/room-usage', [\App\Http\Controllers\Reports\RoomUsageReportController::class, 'index'])->name('admin.reports.room_usage');
+    Route::get('/admin/reports/room-usage/pdf', [\App\Http\Controllers\Reports\RoomUsageReportController::class, 'exportPdf'])->name('admin.reports.room_usage.pdf');
 });
