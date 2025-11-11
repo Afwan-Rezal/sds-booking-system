@@ -49,6 +49,16 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
+                            <h5 class="card-title">Reports</h5>
+                            <p class="card-text">Generate monthly room usage reports.</p>
+                            <a href="{{ route('admin.reports.room_usage') }}" class="btn btn-outline-primary">Room Usage</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
                             <h5 class="card-title">Users</h5>
                             <p class="card-text">View all users in the system.</p>
                             <a href="{{ route('admin.users') }}" class="btn btn-primary">View All Users</a>

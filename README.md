@@ -77,9 +77,9 @@ The system will be extended with features such as role-based permissions, bookin
     -   [x] Each room should have metadata such as projector, whiteboard, and number of sockets.
     -   [ ] Users must be able to filter and request rooms based on these features.
 
--   [ ] **Usage Reports and Logs**
+-   [x] **Usage Reports and Logs**
 
-    -   [ ] Admin users should be able to generate reports on room usage, including frequency, user statistics, and peak times.
+    -   [x] Admin users should be able to generate reports on room usage, including frequency, user statistics, and peak times.
 
 -   [ ] **Recurring Bookings**
 
