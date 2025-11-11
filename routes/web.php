@@ -60,4 +60,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/rooms/{room}/block', [AdminController::class, 'showBlockForm'])->name('admin.rooms.block');
     Route::post('/admin/rooms/{room}/block', [AdminController::class, 'blockRoom'])->name('admin.rooms.block.store');
     Route::post('/admin/rooms/{room}/unblock', [AdminController::class, 'unblockRoom'])->name('admin.rooms.unblock');
+    
+    // Furniture management routes
+    Route::get('/admin/rooms/{room}/furniture', [AdminController::class, 'showFurniture'])->name('admin.rooms.furniture');
+    Route::get('/admin/rooms/{room}/furniture/create', [AdminController::class, 'createFurniture'])->name('admin.rooms.furniture.create');
+    Route::post('/admin/rooms/{room}/furniture', [AdminController::class, 'storeFurniture'])->name('admin.rooms.furniture.store');
+    Route::get('/admin/rooms/{room}/furniture/{roomFurniture}/edit', [AdminController::class, 'editFurniture'])->name('admin.rooms.furniture.edit');
+    Route::put('/admin/rooms/{room}/furniture/{roomFurniture}', [AdminController::class, 'updateFurniture'])->name('admin.rooms.furniture.update');
+    Route::delete('/admin/rooms/{room}/furniture/{roomFurniture}', [AdminController::class, 'destroyFurniture'])->name('admin.rooms.furniture.destroy');
 });
