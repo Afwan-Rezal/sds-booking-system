@@ -41,21 +41,24 @@
                             <div class="p-3 border rounded h-100">
                                 <h6 class="mb-2">Available furniture</h6>
                                 @if($room->furniture && $room->furniture->count() > 0)
-                                    <ul class="list-unstyled ms-0">
-                                        @foreach($room->furniture as $furniture)
-                                            <li class="mb-2">
-                                                <div class="d-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <strong>{{ $furniture->furniture_name }}</strong>
-                                                        @if($furniture->description)
-                                                            <div class="text-muted small">{{ $furniture->description }}</div>
-                                                        @endif
+                                    {{-- Constrain furniture list height and allow scrolling when many items --}}
+                                    <div class="overflow-auto" style="max-height:220px;">
+                                        <ul class="list-unstyled ms-0 mb-0">
+                                            @foreach($room->furniture as $furniture)
+                                                <li class="mb-2">
+                                                    <div class="d-flex justify-content-between align-items-start">
+                                                        <div>
+                                                            <strong>{{ $furniture->furniture_name }}</strong>
+                                                            @if($furniture->description)
+                                                                <div class="text-muted small">{{ $furniture->description }}</div>
+                                                            @endif
+                                                        </div>
+                                                        <span class="badge bg-secondary ms-2">{{ $furniture->quantity }}</span>
                                                     </div>
-                                                    <span class="badge bg-secondary ms-2">{{ $furniture->quantity }}</span>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 @else
                                     <p class="mb-1 text-muted"><em>No furniture information available</em></p>
                                 @endif
