@@ -18,42 +18,50 @@
                         @endif
                     </p>
 
-                    {{-- Room metadata details --}}
-                    <div class="mb-2">
-                        <p class="mb-1"><strong>Capacity:</strong> {{ optional($meta)->capacity ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>Type:</strong> {{ optional($meta)->type ?? 'N/A' }}</p>
-                        <p class="mb-1"><strong>Location:</strong> {{ optional($meta)->location ?? 'N/A' }}</p>
-                        @if(optional($meta)->description)
-                            <p class="mb-1"><strong>Description:</strong> {{ $meta->description }}</p>
-                        @endif
-                        @if($isBlocked && optional($meta)->blocked_reason)
-                            <p class="mb-1 text-danger"><strong>Blocked Reason:</strong> {{ $meta->blocked_reason }}</p>
-                        @elseif($isBlocked)
-                            <p class="mb-1 text-danger"><strong>Blocked Reason:</strong> Not specified</p>
-                        @endif
-                    </div>
+                    {{-- Room metadata and furniture side-by-side --}}
+                    <div class="row mb-2">
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="p-3 border rounded h-100">
+                                <h6 class="mb-2">Room details</h6>
+                                <p class="mb-1"><strong>Capacity:</strong> {{ optional($meta)->capacity ?? 'N/A' }}</p>
+                                <p class="mb-1"><strong>Type:</strong> {{ optional($meta)->type ?? 'N/A' }}</p>
+                                <p class="mb-1"><strong>Location:</strong> {{ optional($meta)->location ?? 'N/A' }}</p>
+                                @if(optional($meta)->description)
+                                    <p class="mb-1"><strong>Description:</strong> {{ $meta->description }}</p>
+                                @endif
+                                @if($isBlocked && optional($meta)->blocked_reason)
+                                    <p class="mb-1 text-danger"><strong>Blocked Reason:</strong> {{ $meta->blocked_reason }}</p>
+                                @elseif($isBlocked)
+                                    <p class="mb-1 text-danger"><strong>Blocked Reason:</strong> Not specified</p>
+                                @endif
+                            </div>
+                        </div>
 
-                    {{-- Furniture listing --}}
-                    @if($room->furniture && $room->furniture->count() > 0)
-                        <div class="mb-2">
-                            <p class="mb-2"><strong>Available Furniture:</strong></p>
-                            <ul class="list-unstyled ms-3">
-                                @foreach($room->furniture as $furniture)
-                                    <li class="mb-1">
-                                        <strong>{{ $furniture->furniture_name }}</strong>
-                                        <span class="badge bg-secondary ms-2">{{ $furniture->quantity }}</span>
-                                        @if($furniture->description)
-                                            <small class="text-muted d-block ms-4">- {{ $furniture->description }}</small>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="p-3 border rounded h-100">
+                                <h6 class="mb-2">Available furniture</h6>
+                                @if($room->furniture && $room->furniture->count() > 0)
+                                    <ul class="list-unstyled ms-0">
+                                        @foreach($room->furniture as $furniture)
+                                            <li class="mb-2">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <strong>{{ $furniture->furniture_name }}</strong>
+                                                        @if($furniture->description)
+                                                            <div class="text-muted small">{{ $furniture->description }}</div>
+                                                        @endif
+                                                    </div>
+                                                    <span class="badge bg-secondary ms-2">{{ $furniture->quantity }}</span>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <p class="mb-1 text-muted"><em>No furniture information available</em></p>
+                                @endif
+                            </div>
                         </div>
-                    @else
-                        <div class="mb-2">
-                            <p class="mb-1 text-muted"><em>No furniture information available</em></p>
-                        </div>
-                    @endif
+                    </div>
 
                     {{-- Current booking info for this room (today) --}}
                     @php($rv = $roomView[$room->id] ?? null)
