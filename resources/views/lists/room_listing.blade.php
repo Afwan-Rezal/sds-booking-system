@@ -33,6 +33,28 @@
                         @endif
                     </div>
 
+                    {{-- Furniture listing --}}
+                    @if($room->furniture && $room->furniture->count() > 0)
+                        <div class="mb-2">
+                            <p class="mb-2"><strong>Available Furniture:</strong></p>
+                            <ul class="list-unstyled ms-3">
+                                @foreach($room->furniture as $furniture)
+                                    <li class="mb-1">
+                                        <strong>{{ $furniture->furniture_name }}</strong>
+                                        <span class="badge bg-secondary ms-2">{{ $furniture->quantity }}</span>
+                                        @if($furniture->description)
+                                            <small class="text-muted d-block ms-4">- {{ $furniture->description }}</small>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @else
+                        <div class="mb-2">
+                            <p class="mb-1 text-muted"><em>No furniture information available</em></p>
+                        </div>
+                    @endif
+
                     {{-- Current booking info for this room (today) --}}
                     @php($rv = $roomView[$room->id] ?? null)
                     @if($rv && $rv['has_current'])

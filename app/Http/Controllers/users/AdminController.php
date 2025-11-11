@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\Room;
+use App\Models\RoomFurniture;
 
 use App\Mail\BookingApprovedMail;
 use Throwable;
@@ -202,6 +203,77 @@ class AdminController extends Controller
         $booking->update(['status' => 'rejected']);
         
         return redirect()->route('admin.pending_bookings')->with('success', 'Booking rejected.');
+    }
+
+    // Furniture Management Methods
+    public function showFurniture(Room $room)
+    {
+        $room->load('furniture');
+        return view('admin.furniture', compact('room'));
+    }
+
+    public function createFurniture(Room $room)
+    {
+        return view('admin.furniture_form', compact('room'));
+    }
+
+    public function storeFurniture(Request $request, Room $room)
+    {
+        $validated = $request->validate([
+            'furniture_name' => ['required', 'string', 'max:255'],
+            'quantity' => ['required', 'integer', 'min:1'],
+            'description' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $room->furniture()->create($validated);
+
+        return redirect()->route('admin.rooms.furniture', $room)
+            ->with('success', 'Furniture added successfully.');
+    }
+
+    public function editFurniture(Room $room, RoomFurniture $roomFurniture)
+    {
+        // Ensure the furniture belongs to the room
+        if ($roomFurniture->room_id !== $room->id) {
+            return redirect()->route('admin.rooms.furniture', $room)
+                ->withErrors(['error' => 'Furniture does not belong to this room.']);
+        }
+
+        return view('admin.furniture_form', compact('room'))->with('furniture', $roomFurniture);
+    }
+
+    public function updateFurniture(Request $request, Room $room, RoomFurniture $roomFurniture)
+    {
+        // Ensure the furniture belongs to the room
+        if ($roomFurniture->room_id !== $room->id) {
+            return redirect()->route('admin.rooms.furniture', $room)
+                ->withErrors(['error' => 'Furniture does not belong to this room.']);
+        }
+
+        $validated = $request->validate([
+            'furniture_name' => ['required', 'string', 'max:255'],
+            'quantity' => ['required', 'integer', 'min:1'],
+            'description' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $roomFurniture->update($validated);
+
+        return redirect()->route('admin.rooms.furniture', $room)
+            ->with('success', 'Furniture updated successfully.');
+    }
+
+    public function destroyFurniture(Room $room, RoomFurniture $roomFurniture)
+    {
+        // Ensure the furniture belongs to the room
+        if ($roomFurniture->room_id !== $room->id) {
+            return redirect()->route('admin.rooms.furniture', $room)
+                ->withErrors(['error' => 'Furniture does not belong to this room.']);
+        }
+
+        $roomFurniture->delete();
+
+        return redirect()->route('admin.rooms.furniture', $room)
+            ->with('success', 'Furniture deleted successfully.');
     }
 }
 

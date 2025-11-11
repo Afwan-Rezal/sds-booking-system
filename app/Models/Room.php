@@ -22,4 +22,10 @@ class Room extends Model
     {
         return $this->belongsTo(RoomMetadata::class, 'room_metadata_id');
     }
+
+    // Relationship: Room has many furniture items
+    public function furniture()
+    {
+        return $this->hasMany(RoomFurniture::class, 'room_id');
+    }
 }

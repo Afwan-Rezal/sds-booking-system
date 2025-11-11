@@ -56,20 +56,25 @@
                                             <td>{{ $meta->type ?? 'N/A' }}</td>
                                             <td>{{ $meta->location ?? 'N/A' }}</td>
                                             <td class="text-end">
-                                                @if(! $meta)
-                                                    <span class="text-danger small">Missing metadata</span>
-                                                @elseif($meta->is_blocked)
-                                                    <form action="{{ route('admin.rooms.unblock', $room) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-outline-success btn-sm">
-                                                            Unblock
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <a href="{{ route('admin.rooms.block', $room) }}" class="btn btn-warning btn-sm">
-                                                        Block
+                                                <div class="d-flex gap-2 justify-content-end">
+                                                    <a href="{{ route('admin.rooms.furniture', $room) }}" class="btn btn-info btn-sm">
+                                                        Manage Furniture
                                                     </a>
-                                                @endif
+                                                    @if(! $meta)
+                                                        <span class="text-danger small">Missing metadata</span>
+                                                    @elseif($meta->is_blocked)
+                                                        <form action="{{ route('admin.rooms.unblock', $room) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                                                Unblock
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <a href="{{ route('admin.rooms.block', $room) }}" class="btn btn-warning btn-sm">
+                                                            Block
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

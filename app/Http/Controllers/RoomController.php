@@ -23,8 +23,8 @@ class RoomController extends Controller
 
     public function index()
     {
-        // Eager-load room metadata for display
-        $rooms = Room::with('metadata')->get();
+        // Eager-load room metadata and furniture for display
+        $rooms = Room::with(['metadata', 'furniture'])->get();
 
         $result = $this->roomViewBuilder->buildRoomViewData($rooms);
 
