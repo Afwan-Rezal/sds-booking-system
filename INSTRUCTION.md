@@ -13,6 +13,8 @@ This project has been made by using Cursor AI and GitHub CoPilot for generating 
 
 This project also uses _SQLite_ as a database during the development phase, but _MySQL from XAMPP_ can also be used. This project will assume that the lecturer will use **MySQL** from **XAMPP** to test the project and its functionality.
 
+Within this markdown file, it will contain information on file configuration, and how to use
+
 ### Development Notes
 
 The video report demonstrated the functionality of the email sending for certain situations by using the **student's personal email address**. To experience the same functionalities found within the video report, kindly replace these functionality found later within the report below.
@@ -22,7 +24,7 @@ An extension from _Database Client_ from Visual Studio Code's Extensions Marketp
 A GitHub page can be found within this text here:
 [Afwan-Rezal/sds-booking-system](https://github.com/Afwan-Rezal/sds-booking-system)
 
-## How to use
+## Instructions
 
 To get started on the system (by using the zip file found within the submission):
 
