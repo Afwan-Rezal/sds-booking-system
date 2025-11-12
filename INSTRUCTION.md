@@ -101,7 +101,11 @@ Run the commands below:
 >>> y
 ```
 
+Helps create a new database within the MySQL database.
+
 #### 2.2 'Seeding' the existing table with data
+
+> Ensure that Seeder files found within `database/seeders` directory are satisfactory with the lecturer, otherwise kindly make changes to files where required.
 
 ```powershell
 >>> php artisan db:seed
@@ -112,8 +116,6 @@ Run the commands below:
 ```powershell
 >>> php artisan serve
 ```
-
-Run `php artisan serve`.
 
 ### 3.0 Available accounts for use
 
