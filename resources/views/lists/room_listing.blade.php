@@ -108,8 +108,12 @@
                         @endif
 
                         {{-- Booking button --}}
+                        @php($canBook = $canBookRoom[$room->id] ?? false)
                         @if($isBlocked)
                             <p class="text-danger">This room is blocked and cannot be booked at the moment.</p>
+                            <a href="#" class="btn btn-secondary disabled" aria-disabled="true">Book</a>
+                        @elseif(!$canBook)
+                            <p class="text-warning">Your role does not have permission to book this room.</p>
                             <a href="#" class="btn btn-secondary disabled" aria-disabled="true">Book</a>
                         @else
                             <a href="{{ route('rooms.select', ['id' => $room->id]) }}" class="btn btn-primary">Book</a>
