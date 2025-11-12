@@ -11,11 +11,11 @@
                 <strong>Note:</strong> Users who registered as staff are shown here. Approve or reject their staff access requests.
             </div>
             
-            <div class="card">
-                <div class="card-header">
+            <div class="card sds-card">
+                <div class="card-header sds-card-header">
                     <h5 class="mb-0">Pending Approval Requests</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body sds-card-body">
                     @if($users->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover">

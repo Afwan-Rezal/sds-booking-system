@@ -13,7 +13,6 @@
                 </div>
                 <div class="card-body sds-card-body">
                     <h5 class="card-title">Welcome, Student!</h5>
-                    <p class="card-text">This is the student dashboard. Expand upon this page in the future.</p>
                     
                     <div class="mt-3">
                         <p><strong>Your Role:</strong> Student</p>
