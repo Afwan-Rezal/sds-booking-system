@@ -40,7 +40,7 @@
                 <div class="col-md-6">
                     <div class="card sds-card">
                         <div class="card-header sds-card-header">
-                            <h5 class="card-title">My Bookings</h5>
+                            <h5 class="mb-0">My Bookings</h5>
                         </div>
                         <div class="card-body sds-card-body">
                             <p class="card-text">View your room bookings.</p>
