@@ -2,7 +2,7 @@
 
 > For: Mr. Ong Wee Chong
 
-> Submitted by: Afif Afwan Bin Mohamad Rezal
+> Submitted by: Afif Afwan Bin Mohamad Rezal (21B6027)
 
 ## Overview
 
@@ -15,6 +15,8 @@ This project also uses _SQLite_ as a database during the development phase, but 
 
 ### Development Notes
 
+The video report demonstrated the functionality of the email sending for certain situations by using the **student's personal email address**. To experience the same functionalities found within the video report, kindly replace these functionality found later within the report below.
+
 An extension from _Database Client_ from Visual Studio Code's Extensions Marketpalce is used to be able to see the data within the SQLite, as well as MySQL (XAMPP).
 
 A GitHub page can be found within this text here:
@@ -24,7 +26,11 @@ A GitHub page can be found within this text here:
 
 To get started on the system (by using the zip file found within the submission):
 
-### 1. Create new Database
+### 1.0 `.env` file modification
+
+Within the `.env` file, kindly make modification below:
+
+#### 1.1 Database Configuration
 
 ```.env
 DB_CONNECTION=sqlite
@@ -46,9 +52,41 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-After replacing the text and saving the `.env` file, run `php artisan serve` within the terminal. This will create a new database called `21B6027_DB_ASG01`.
+This will connect with the MySQL database, and during execution, will create a new a new database called `21B6027_DB_ASG01`.
+
+#### 1.2 Email Configuration (Optional)
+
+The current email configuration uses the student's personal email account to send email. To make changes to experience the functionality of sending emails for certain situation, kindly follow the instructions below.
+
+Within the same `.env` file:
+
+```.env
+MAIL_MAILER="smtp"
+MAIL_SCHEME=null
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=afwanrezal.dev@gmail.com
+MAIL_PASSWORD="ejhi vtoj xpri glpd"
+MAIL_FROM_ADDRESS="sds@ubd.edu.bn"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Kindly replace the lines with the following format:
+
+```.env
+MAIL_MAILER="smtp"
+MAIL_SCHEME=null
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME={{yourEmailAddress@gmail.com}}
+MAIL_PASSWORD="{{Your App Password}}"
+MAIL_FROM_ADDRESS="sds@ubd.edu.bn"
+MAIL_FROM_NAME="${APP_NAME}"
+```
 
 Pre-exisiting data can be added into the tables found in the database by running `php artisan db:seed`.
+
+> The email address found within `database/seeders/UserSeeder.php` are fake e-mail account, changed to allow for the lecturer to change to his personal email account to see the effects of these functionalities.
 
 ### 2. Running the web page
 
@@ -58,4 +96,10 @@ Run `php artisan serve`.
 
 ### 3. Available accounts for use
 
-Here are the list of accounts that can be used during the...
+There are three accounts that can be used during the development, which was seeded during the execution of `php artisan db:seed`.
+
+Here are the list of accounts that can be used during the testing of the codebase:
+
+```
+
+```
