@@ -26,7 +26,7 @@ A GitHub page can be found within this text here:
 
 ## Instructions
 
-To get started on the system (by using the zip file found within the submission):
+To get started on using the system (by using the zip file found within the submission):
 
 ### 1.0 `.env` file modification
 
@@ -68,7 +68,7 @@ MAIL_SCHEME=null
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
 MAIL_USERNAME=afwanrezal.dev@gmail.com
-MAIL_PASSWORD="ejhi vtoj xpri glpd"
+MAIL_PASSWORD="{{hidden}}"
 MAIL_FROM_ADDRESS="sds@ubd.edu.bn"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
@@ -86,22 +86,114 @@ MAIL_FROM_ADDRESS="sds@ubd.edu.bn"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-Pre-exisiting data can be added into the tables found in the database by running `php artisan db:seed`.
+---
 
-> The email address found within `database/seeders/UserSeeder.php` are fake e-mail account, changed to allow for the lecturer to change to his personal email account to see the effects of these functionalities.
-
-### 2. Running the web page
+### 2.0 Running the web page
 
 Ensure that XAMPP is running (in admin mode) with _Apache Module_ and _MySQL Module_ toggled to on.
 
+Run the commands below:
+
+#### 2.1 Creating New Database
+
+```powershell
+>>> php artisan migrate
+>>> y
+```
+
+#### 2.2 'Seeding' the existing table with data
+
+```powershell
+>>> php artisan db:seed
+```
+
+#### 2.3 Running the Laravel Website
+
+```powershell
+>>> php artisan serve
+```
+
 Run `php artisan serve`.
 
-### 3. Available accounts for use
+### 3.0 Available accounts for use
 
 There are three accounts that can be used during the development, which was seeded during the execution of `php artisan db:seed`.
 
 Here are the list of accounts that can be used during the testing of the codebase:
 
 ```
+Role: Admin
+Email:
+Password:
 
+Role: Staff
+Email:
+Password:
+
+Role: Student
+Email:
+Password:
 ```
+
+> While these are three accounts that can be used, new accounts (for either student or staff) can be created, but new-staff roles are required to have **approval awarded by the admin** to have access to the dashboard and other functionalities.
+
+## Functionalities available for different roles
+
+### 1.0 Admin Role
+
+#### 1.1 Manage Room
+
+Admin roles are able to manage the rooms available:
+
+-   Enable their availability for booking or disable them (with reasons given); and
+-   Manage the furnitures (and equipments) that can be found within each room.
+
+#### 1.2 Generate Report
+
+Admin roles are able to generate reports on the usage of rooms.
+
+#### 1.3 View Available Users
+
+Admin roles are able to see the available users within the system.
+
+> This does not refer to currently online users, just users registered within the system.
+
+#### 1.4 Approve Room Bookings
+
+Any bookings made by users other than the admin (who has instant approval), will require an approval to the bookings made. The admin role provides the approval to do so.
+
+#### 1.5 Approve New Staff Registration
+
+Admin roles are able to identify new staff registration, and approve or deny these creations.
+
+### 2.0 Common Functionalities
+
+> This includes all 3 roles (admin, staff, student).
+
+#### 2.1 Room Booking
+
+Users are able to book a room for use within a time period that is similar to the UBD timetable.
+
+Bookings are subjected to the following restrictions:
+
+-   Users need a party number of **more than half of the room capacity**, but **not more than the room capacity itself**.
+-   Users are only able to book **maximum of 3 bookings** (with approved or pending status).
+-   Users can only book a room **30 minutes before** the start of the next time.
+
+After clicking to book the room, it will be put to pending to allow for admin to approve or deny the booking. An email will be sent to the user to identify the result.
+
+#### 2.2 View Bookings
+
+Users are able to see the bookings made by the user at any given time. Any bookings that were found to be completed or cancelled will not be able to be edited, while others can.
+
+##### 2.2.1 Editing Bookings
+
+A booking can be selected to do editing on the booking details, and it will be reflected.
+
+An email will be sent to the user to make notifications on the changes made to the booking.
+
+##### 2.2.2 Cancel Bookings
+
+A booking can be selected to be cancelled, and it will be reflected.
+
+An email will be sent to the user to make notifications on the changes made to the booking.
