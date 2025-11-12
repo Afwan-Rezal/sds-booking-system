@@ -1,0 +1,39 @@
+.sds-navbar {
+    background-color: #004aad; /* your brand color */
+    color: #ffffff;
+}
+
+.sds-navbar-brand {
+    color: white !important;
+}
+
+.sds-navbar-item {
+    color: white !important;
+}
+
+.sds-navbar-item:hover {
+    color: #ccc !important; /* optional hover color */
+}
+
+.sds-navbar-link {
+    color: white !important;
+    transition: color 0.2s ease;
+}
+
+.sds-navbar-link:hover {
+    color: #ccc !important; /* optional hover color */
+}
+
+.sds-card-header {
+    background-color: #004080; /* Custom blue */
+    color: white; /* Text color */
+    border-bottom: none; /* Optional cleaner look */
+}
+.sds-card {
+    border: 1px solid #004aad; /* Border color matching navbar */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+.sds-card-body {
+    padding: 20px; /* Increased padding */
+}
