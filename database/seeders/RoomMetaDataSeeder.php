@@ -14,11 +14,16 @@ class RoomMetaDataSeeder extends Seeder
     public function run(): void
     {
         DB::table('room_metadatas')->insert([
+            // Computer Lab - Small (rooms 1-3)
+            // Admin: YES, Staff: YES, Student: NO
             [
                 'id' => 1,
                 'capacity' => 25,
                 'type' => 'Computer Lab - Small',
                 'location' => 'Ground Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 0,
             ],
 
             [
@@ -26,6 +31,9 @@ class RoomMetaDataSeeder extends Seeder
                 'capacity' => 25,
                 'type' => 'Computer Lab - Small',
                 'location' => 'Ground Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 0,
             ],
 
             [
@@ -33,13 +41,21 @@ class RoomMetaDataSeeder extends Seeder
                 'capacity' => 25,
                 'type' => 'Computer Lab - Small',
                 'location' => 'Ground Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 0,
             ],
             
+            // Computer Lab - Large (rooms 4-5)
+            // Admin: YES, Staff: NO, Student: NO
             [
                 'id' => 4,
                 'capacity' => 50,
                 'type' => 'Computer Lab - Large',
                 'location' => 'Ground Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 0,
+                'student_can_book' => 0,
             ],
 
             [
@@ -47,13 +63,21 @@ class RoomMetaDataSeeder extends Seeder
                 'capacity' => 50,
                 'type' => 'Computer Lab - Large',
                 'location' => 'Ground Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 0,
+                'student_can_book' => 0,
             ],
 
+            // Lecture Room - Small (rooms 6-9)
+            // Admin: YES, Staff: YES, Student: YES
             [
                 'id' => 6,
                 'capacity' => 15,
                 'type' => 'Lecture Room - Small',
                 'location' => '1st Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 1,
             ],
 
             [
@@ -61,6 +85,9 @@ class RoomMetaDataSeeder extends Seeder
                 'capacity' => 15,
                 'type' => 'Lecture Room - Small',
                 'location' => '1st Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 1,
             ],
 
             [
@@ -68,6 +95,9 @@ class RoomMetaDataSeeder extends Seeder
                 'capacity' => 15,
                 'type' => 'Lecture Room - Small',
                 'location' => '1st Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 1,
             ],
 
             [
@@ -75,13 +105,21 @@ class RoomMetaDataSeeder extends Seeder
                 'capacity' => 15,
                 'type' => 'Lecture Room - Small',
                 'location' => '1st Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 1,
             ],
 
+            // Lecture Room - Large (rooms 10-11)
+            // Admin: YES, Staff: YES, Student: NO
             [
                 'id' => 10,
                 'capacity' => 30,
                 'type' => 'Lecture Room - Large',
                 'location' => '1st Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 0,
             ],
 
             [
@@ -89,13 +127,21 @@ class RoomMetaDataSeeder extends Seeder
                 'capacity' => 30,
                 'type' => 'Lecture Room - Large',
                 'location' => '1st Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 0,
             ],
 
+            // Tutorial Room (room 12)
+            // Admin: YES, Staff: YES, Student: YES
             [
                 'id' => 12,
                 'capacity' => 15,
                 'type' => 'Tutorial Room',
                 'location' => 'Ground Floor',
+                'admin_can_book' => 1,
+                'staff_can_book' => 1,
+                'student_can_book' => 1,
             ],
         ]);
     }
