@@ -7,11 +7,11 @@
         <div class="col-12">
             <h2 class="mb-4">Manage Rooms</h2>
 
-            <div class="card">
-                <div class="card-header">
+            <div class="card sds-card">
+                <div class="card-header sds-card-header">
                     <h5 class="mb-0">Rooms Overview</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body sds-card-body">
                     @if($rooms->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover align-middle">
@@ -34,7 +34,7 @@
                                             <td>{{ $room->name }}</td>
                                             <td>
                                                 @php($meta = $room->metadata)
-                                                <span class="badge {{ ($meta && !optional($meta)->is_blocked) ? 'bg-success' : 'bg-secondary' }}">
+                                                <span class="badge {{ ($meta && !optional($meta)->is_blocked) ? 'bg-success' : 'bg-danger' }}">
                                                     {{ ($meta && !optional($meta)->is_blocked) ? 'Available' : 'Unavailable' }}
                                                 </span>
                                             </td>
@@ -57,7 +57,7 @@
                                             <td>{{ $meta->location ?? 'N/A' }}</td>
                                             <td class="text-end">
                                                 <div class="d-flex gap-2 justify-content-end">
-                                                    <a href="{{ route('admin.rooms.furniture', $room) }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ route('admin.rooms.furniture', $room) }}" class="btn btn-primary btn-sm">
                                                         Manage Furniture
                                                     </a>
                                                     @if(! $meta)
@@ -70,7 +70,7 @@
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <a href="{{ route('admin.rooms.block', $room) }}" class="btn btn-warning btn-sm">
+                                                        <a href="{{ route('admin.rooms.block', $room) }}" class="btn btn-danger btn-sm">
                                                             Block
                                                         </a>
                                                     @endif

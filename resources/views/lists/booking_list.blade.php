@@ -136,24 +136,21 @@
                     <h5>No bookings found</h5>
                     <p>You haven't made any room booking requests yet.</p>
                     <a href="{{ route('rooms.index') }}" class="btn btn-primary">Book a Room</a>
+                    @auth
+                        @php
+                            $role = strtolower(Auth::user()->profile->role ?? '');
+                        @endphp
+                        @if($role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-success">Dashboard</a>
+                        @elseif($role === 'staff')
+                            <a href="{{ route('staff.dashboard') }}" class="btn btn-outline-success">Dashboard</a>
+                        @elseif($role === 'student')
+                            <a href="{{ route('student.dashboard') }}" class="btn btn-outline-success">Dashboard</a>
+                        @endif
+                    @endauth
                 </div>
             @endif
 
-            <div class="mt-3">
-                <a href="{{ route('rooms.index') }}" class="btn btn-secondary">Back to Room Listings</a>
-                @auth
-                    @php
-                        $role = strtolower(Auth::user()->profile->role ?? '');
-                    @endphp
-                    @if($role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                    @elseif($role === 'staff')
-                        <a href="{{ route('staff.dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                    @elseif($role === 'student')
-                        <a href="{{ route('student.dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                    @endif
-                @endauth
-            </div>
         </div>
     </div>
 </div>

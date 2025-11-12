@@ -7,8 +7,8 @@
         <div class="col-lg-8 col-12">
             <h2 class="mb-4">{{ isset($furniture) ? 'Edit Furniture' : 'Add Furniture' }} - {{ $room->name }}</h2>
 
-            <div class="card">
-                <div class="card-header">
+            <div class="card sds-card">
+                <div class="card-header sds-card-header">
                     <h5 class="mb-0">Room Information</h5>
                 </div>
                 <div class="card-body">
@@ -25,8 +25,8 @@
                 </div>
             </div>
 
-            <div class="card mt-4">
-                <div class="card-header">
+            <div class="card sds-card mt-4">
+                <div class="card-header sds-card-header">
                     <h5 class="mb-0">{{ isset($furniture) ? 'Edit Furniture Details' : 'Furniture Details' }}</h5>
                 </div>
                 <div class="card-body">
