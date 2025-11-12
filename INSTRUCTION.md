@@ -24,6 +24,27 @@ An extension from _Database Client_ from Visual Studio Code's Extensions Marketp
 A GitHub page can be found within this text here:
 [Afwan-Rezal/sds-booking-system](https://github.com/Afwan-Rezal/sds-booking-system)
 
+### Tools used
+
+#### Frontend and Backend
+
+-   Laravel 12
+-   Bootstrap 5 (CSS)
+
+#### Database
+
+-   SQLite (Dev)
+-   XAMPP - MySQL (Final Dev Usage)
+
+#### AI Tools
+
+-   Cursor AI
+-   GitHub Co-Pilot
+
+#### Version Control System
+
+-   GitHub
+
 ## Instructions
 
 To get started on using the system (by using the zip file found within the submission):
