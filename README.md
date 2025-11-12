@@ -185,7 +185,6 @@ The system will be extended with features such as role-based permissions, bookin
   <img src="public/github_screenshots/sds_bms_03.png" alt="Room Selection Page" style="height:200px; display:inline-block; margin-right:10px;">
 
 </div>
-_Add screenshots of the UI once implemented._
 
 ---
 
