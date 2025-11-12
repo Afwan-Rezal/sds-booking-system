@@ -176,6 +176,9 @@ The system will be extended with features such as role-based permissions, bookin
 
 ## Screenshots
 
+![Home Page](public/github_screenshots/sds_bms_01.png)
+![Dashboard (Admin)](public/github_screenshots/sds_bms_02.png)
+![Room Selection Page](public/github_screenshots/sds_bms_03.png)
 _Add screenshots of the UI once implemented._
 
 ---
