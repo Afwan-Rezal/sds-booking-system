@@ -38,7 +38,7 @@ Route::post('/booking/edit/{id}', [BookingController::class, 'updateBooking'])->
 Route::post('/booking/cancel/{id}', [BookingController::class, 'cancelBooking'])->name('bookings.cancel')->middleware('auth');
 
 Route::controller(UserController::class)->group(function () {
-    Route::get('login', [UserController::class, 'index'])->name('auth');
+    Route::get('auth', [UserController::class, 'index'])->name('auth');
     Route::post('register', 'register')->name('register');
     Route::post('login', 'login')->name('login');
     Route::post('logout', 'logout')->name('logout');
