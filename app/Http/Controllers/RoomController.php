@@ -28,10 +28,25 @@ class RoomController extends Controller
 
         $result = $this->roomViewBuilder->buildRoomViewData($rooms);
 
+        // Build permission data: check if current user can book each room
+        $canBookRoom = [];
+        if (Auth::check()) {
+            $userRole = Auth::user()->profile ? strtolower(Auth::user()->profile->role) : null;
+            foreach ($rooms as $room) {
+                $canBookRoom[$room->id] = $this->canUserBookRoom($room, $userRole);
+            }
+        } else {
+            // Guest users cannot book any room
+            foreach ($rooms as $room) {
+                $canBookRoom[$room->id] = false;
+            }
+        }
+
         return view('lists.room_listing', [
             'rooms' => $rooms,
             'roomView' => $result['roomView'],
             'now' => $result['now'],
+            'canBookRoom' => $canBookRoom,
         ]);
     }
 
@@ -69,5 +84,30 @@ class RoomController extends Controller
             return view('forms.room_booking', compact('selectedRoom'));
         }
     }
-               
+
+    /**
+     * Check if user with given role can book the specified room.
+     *
+     * @param Room $room
+     * @param string|null $role
+     * @return bool
+     */
+    private function canUserBookRoom(Room $room, ?string $role): bool
+    {
+        if (!$room->metadata) {
+            return false;
+        }
+
+        $meta = $room->metadata;
+
+        if ($role === 'admin') {
+            return (bool) ($meta->admin_can_book ?? false);
+        } elseif ($role === 'staff') {
+            return (bool) ($meta->staff_can_book ?? false);
+        } elseif ($role === 'student') {
+            return (bool) ($meta->student_can_book ?? false);
+        }
+
+        return false;
+    }
 }
