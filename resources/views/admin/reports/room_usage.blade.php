@@ -25,10 +25,10 @@
                 </div>
             </form>
 
-            <div class="card mb-4">
-                <div class="card-body">
+            <div class="card sds-card mb-4">
+                <div class="card-body sds-card-body">
                     <h5 class="card-title">Usage Summary ({{ \Carbon\Carbon::create($selectedYear, $selectedMonth, 1)->format('F Y') }})</h5>
-                    <div class="table-responsive">
+                    <div class="table-responsive sds-table">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -63,8 +63,8 @@
                 </div>
             </div>
 
-			<div class="card">
-				<div class="card-body">
+			<div class="card sds-card">
+				<div class="card-body sds-card-body">
 					<h5 class="card-title">Most Frequently Used Rooms</h5>
 					<div id="chartContainer" class="mx-auto" style="max-width: 900px;">
 						<canvas id="usageChart" style="width: 100%; height: 320px;"></canvas>

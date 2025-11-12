@@ -7,16 +7,16 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Manage Furniture - {{ $room->name }}</h2>
-                <a href="{{ route('admin.rooms.furniture.create', $room) }}" class="btn btn-primary">
+                <a href="{{ route('admin.rooms.furniture.create', $room) }}" class="btn btn-success">
                     <i class="bi bi-plus-circle"></i> Add Furniture
                 </a>
             </div>
 
-            <div class="card">
-                <div class="card-header">
+            <div class="card sds-card">
+                <div class="card-header sds-card-header">
                     <h5 class="mb-0">Room Information</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body sds-card-body">
                     <dl class="row mb-0">
                         <dt class="col-sm-3">Room Name</dt>
                         <dd class="col-sm-9">{{ $room->name }}</dd>
@@ -33,11 +33,11 @@
                 </div>
             </div>
 
-            <div class="card mt-4">
-                <div class="card-header">
+            <div class="card sds-card mt-4">
+                <div class="card-header sds-card-header">
                     <h5 class="mb-0">Furniture List</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body sds-card-body">
                     @if($room->furniture && $room->furniture->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover align-middle">

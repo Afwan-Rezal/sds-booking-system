@@ -63,7 +63,6 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
-        // return view('test')->with('message', 'Logged out successfully.');
+        return redirect('/');
     }
 }

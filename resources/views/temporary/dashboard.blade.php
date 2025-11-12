@@ -5,11 +5,11 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <div class="card border-warning">
-                <div class="card-header bg-warning text-dark">
+            <div class="card sds-card">
+                <div class="card-header sds-card-header">
                     <h4 class="mb-0">Pending Staff Approval</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body sds-card-body">
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle"></i>
                         <strong>Your registration is pending admin approval.</strong>
@@ -45,10 +45,9 @@
                     </div>
                     
                     <div class="mt-3">
-                        <a href="{{ route('bookings.list') }}" class="btn btn-primary me-2">View My Bookings</a>
                         <form method="POST" action="{{ route('logout') }}" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-secondary">Logout</button>
+                            <button type="submit" class="btn btn-danger">Logout</button>
                         </form>
                     </div>
                 </div>

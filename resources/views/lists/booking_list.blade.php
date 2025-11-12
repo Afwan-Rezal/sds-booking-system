@@ -8,11 +8,11 @@
             <h2 class="mb-4">My Bookings</h2>
 
             @if($bookings->count() > 0)
-                <div class="card">
-                    <div class="card-header">
+                <div class="card sds-card mb-4">
+                    <div class="card-header sds-card-header">
                         <h5 class="mb-0">All My Bookings</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body sds-card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -55,13 +55,23 @@
                                                 @endif
                                             </td>
                                             <td>{{ $booking->created_at->format('Y-m-d H:i') }}</td>
-                                            <td class="row-actions" style="white-space:nowrap;">
-                                                @if($booking->status !== 'completed' && $booking->status !== 'rejected' && $booking->status !== 'cancelled')
-                                                    <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-primary me-1">Edit</a>
-                                                    {{-- <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button> --}}
-                                                @else
-                                                    <span class="text-muted">Actions unavailable</span>
-                                                @endif
+                                            <td class="row-actions text-center" style="white-space:nowrap;">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-grow-1">
+                                                            {{-- Left placeholder: show message when actions unavailable --}}
+                                                            @if($booking->status === 'completed' || $booking->status === 'rejected' || $booking->status === 'cancelled')
+                                                                <span class="text-muted">Actions unavailable</span>
+                                                            @endif
+                                                        </div>
+
+                                                        <div>
+                                                            {{-- Right-aligned actions: the left flex-grow-1 pushes this to the right --}}
+                                                            @if($booking->status !== 'completed' && $booking->status !== 'rejected' && $booking->status !== 'cancelled')
+                                                                <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-outline-success">Edit</a>
+                                                                {{-- <button type="button" class="btn btn-sm btn-danger btn-cancel" data-booking-id="{{ $booking->id }}" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button> --}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                             </td>
                                         </tr>
 
@@ -136,24 +146,21 @@
                     <h5>No bookings found</h5>
                     <p>You haven't made any room booking requests yet.</p>
                     <a href="{{ route('rooms.index') }}" class="btn btn-primary">Book a Room</a>
+                    @auth
+                        @php
+                            $role = strtolower(Auth::user()->profile->role ?? '');
+                        @endphp
+                        @if($role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-success">Dashboard</a>
+                        @elseif($role === 'staff')
+                            <a href="{{ route('staff.dashboard') }}" class="btn btn-outline-success">Dashboard</a>
+                        @elseif($role === 'student')
+                            <a href="{{ route('student.dashboard') }}" class="btn btn-outline-success">Dashboard</a>
+                        @endif
+                    @endauth
                 </div>
             @endif
 
-            <div class="mt-3">
-                <a href="{{ route('rooms.index') }}" class="btn btn-secondary">Back to Room Listings</a>
-                @auth
-                    @php
-                        $role = strtolower(Auth::user()->profile->role ?? '');
-                    @endphp
-                    @if($role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                    @elseif($role === 'staff')
-                        <a href="{{ route('staff.dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                    @elseif($role === 'student')
-                        <a href="{{ route('student.dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                    @endif
-                @endauth
-            </div>
         </div>
     </div>
 </div>

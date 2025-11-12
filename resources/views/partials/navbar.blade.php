@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+<nav class="navbar navbar-expand-lg sds-navbar mb-4">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">
+        <a class="navbar-brand sds-navbar-brand" href="{{ url('/') }}">
             {{ config('app.name') }}
         </a>
 
@@ -11,7 +11,7 @@
 
                 @if (Auth::check())
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Welcome, {{ Auth::user()->username }}</a>
+                        <a class="nav-link sds-navbar-link" href="#">Welcome, {{ Auth::user()->username }}</a>
                     </li>
 
                     <li class="nav-item">
@@ -25,14 +25,10 @@
                     
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('auth') }}">Login</a>
+                        <a class="nav-link sds-navbar-link" href="{{ route('auth') }}">Login</a>
                     </li>
                 @endif
-                
 
-                {{-- <li class="nav-item">
-                    <a class="nav-link" href="#">Link 2</a>
-                </li> --}}
 
             </ul>
         </div>
