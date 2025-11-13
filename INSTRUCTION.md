@@ -146,16 +146,16 @@ Here are the list of accounts that can be used during the testing of the codebas
 
 ```
 Role: Admin
-Email:
-Password:
+Email: afwanrezal.dev@gmail.com
+Password: AsgPassword_Admin01
 
 Role: Staff
-Email:
-Password:
+Email: staff@mail.com
+Password: AsgPassword_Staff02
 
 Role: Student
-Email:
-Password:
+Email: afwan.rezal@gmail.com
+Password: AsgPassword_User03
 ```
 
 > While these are three accounts that can be used, new accounts (for either student or staff) can be created, but new-staff roles are required to have **approval awarded by the admin** to have access to the dashboard and other functionalities.
