@@ -13,7 +13,7 @@ This project has been made by using Cursor AI and GitHub CoPilot for generating 
 
 This project also uses _SQLite_ as a database during the development phase, but _MySQL from XAMPP_ can also be used. This project will assume that the lecturer will use **MySQL** from **XAMPP** to test the project and its functionality.
 
-Within this markdown file, it will contain information on file configuration, and how to use
+Within this markdown file, it will contain information on file configuration, and how to use the system application assignment.
 
 ### Development Notes
 
@@ -146,16 +146,16 @@ Here are the list of accounts that can be used during the testing of the codebas
 
 ```
 Role: Admin
-Email:
-Password:
+Email: afwanrezal.dev@gmail.com
+Password: AsgPassword_Admin01
 
 Role: Staff
-Email:
-Password:
+Email: staff@mail.com
+Password: AsgPassword_Staff02
 
 Role: Student
-Email:
-Password:
+Email: afwan.rezal@gmail.com
+Password: AsgPassword_User03
 ```
 
 > While these are three accounts that can be used, new accounts (for either student or staff) can be created, but new-staff roles are required to have **approval awarded by the admin** to have access to the dashboard and other functionalities.
@@ -220,3 +220,7 @@ An email will be sent to the user to make notifications on the changes made to t
 A booking can be selected to be cancelled, and it will be reflected.
 
 An email will be sent to the user to make notifications on the changes made to the booking.
+
+### 3.0 Email Functionality (For All Roles)
+
+All roles contain email functionalities, but to test it, kindly check and use your email to receive the notification. The email will remain active until the end of this semester.
